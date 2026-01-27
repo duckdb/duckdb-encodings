@@ -1,0 +1,23 @@
+# name: test/sql/sjis_boundary.test
+# description: Test Shift-JIS with various configurations
+# group: [encodings]
+
+require encodings
+
+query I
+SELECT count(*)
+FROM read_csv(
+    'data/shift_jis/boundary_line160_cp932.csv.gz',
+    encoding='glibc-CP932-2.3.3',
+    buffer_size=10000,
+    columns={
+        'a': 'VARCHAR', 'b': 'VARCHAR', 'c': 'VARCHAR',
+        'd': 'VARCHAR', 'e': 'VARCHAR', 'f': 'VARCHAR',
+        'g': 'VARCHAR', 'h': 'VARCHAR', 'i': 'VARCHAR',
+        'j': 'VARCHAR', 'k': 'VARCHAR', 'l': 'VARCHAR'
+    },
+    auto_detect=false,
+    parallel=false
+)
+----
+100000
