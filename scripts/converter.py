@@ -71,8 +71,14 @@ def parse_ucm_to_utf8_map(ucm_path):
 			if not in_charmap:
 				continue
 
-			match = re.match(r'<U([0-9A-Fa-f]+)>\s+((?:\\x[0-9A-Fa-f]{2})+)\s+\|\d+', line)
+			match = re.match(r'<U([0-9A-Fa-f]+)>\s+((?:\\x[0-9A-Fa-f]{2})+)\s+\|(\d+)', line)
 			if not match:
+				continue
+
+			# Only process exact roundtrip mappings (fallback indicator = 0)
+			# Skip fallback mappings (|1, |2, |3) to avoid overwriting correct mappings with fullwidth/fallback characters
+			fallback_indicator = int(match.group(3))
+			if fallback_indicator != 0:
 				continue
 
 			unicode_scalar = int(match.group(1), 16)
