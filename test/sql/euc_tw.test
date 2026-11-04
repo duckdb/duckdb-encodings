@@ -7,7 +7,7 @@ require encodings
 foreach enc euc-tw ibm-964_P110-1999
 
 query II
-FROM read_csv('data/euc_tw/planes.csv', encoding='${enc}')
+FROM read_csv('data/euc_tw/planes.csv', encoding='{enc}')
 ----
 plane1	０
 bopomofo	ㄅ

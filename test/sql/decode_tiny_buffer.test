@@ -13,7 +13,7 @@ NULL
 foreach buffer_size 3 4 5
 
 query I
-SELECT string_agg(v, '') FROM read_csv('data/boundaries/tiny_gb18030.csv', encoding='gb18030', buffer_size=${buffer_size}, header=true, columns={'v': 'VARCHAR'}, auto_detect=false)
+SELECT string_agg(v, '') FROM read_csv('data/boundaries/tiny_gb18030.csv', encoding='gb18030', buffer_size={buffer_size}, header=true, columns={'v': 'VARCHAR'}, auto_detect=false)
 ----
 ĀĀĀĀĀ
 
