@@ -7510,17 +7510,8 @@ static const char *const EUC_CN_aliases[] = {"chinese",     "csiso58gb231280",  
                                              "iso_ir_58",   "x-mac-simp-chinese", "x_mac_simp_chinese"};
 
 void Euc_cnToUtf::Register(const DBConfig &config) {
-	const Euc_cnToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                EUC_CN_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : EUC_CN_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      EUC_CN_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "EUC_CN", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_CN_to_utf8, 7495,
+	                          EUC_CN_aliases, 15);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

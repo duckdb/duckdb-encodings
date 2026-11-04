@@ -93,11 +93,8 @@ static const map_entry_encoding glibc_KOI8_U_2_3_3_to_utf8[] = {
     {1, "\xFF", 2, "\xD0\xAA"},
 };
 void Glibc_koi8_u_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_koi8_u_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_KOI8_U_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-KOI8_U-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          glibc_KOI8_U_2_3_3_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

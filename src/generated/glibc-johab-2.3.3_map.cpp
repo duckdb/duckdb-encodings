@@ -17181,11 +17181,8 @@ static const map_entry_encoding glibc_JOHAB_2_3_3_to_utf8[] = {
     {2, "\xF9\xFE", 3, "\xE8\xA9\xB0"},
 };
 void Glibc_johab_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_johab_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_JOHAB_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-JOHAB-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          glibc_JOHAB_2_3_3_to_utf8, 17174);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

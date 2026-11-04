@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Gb18030ToUtf {
 public:
-	Gb18030ToUtf() {};
-	const idx_t lookup_bytes = 4;
-	const idx_t max_bytes_per_byte = 4;
-	const string name = "gb18030";
-	const idx_t size = 30862;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

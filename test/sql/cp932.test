@@ -8,18 +8,18 @@ foreach enc windows-932-2000 cp932 ms932 windows-31j
 
 # A pure-ASCII CP932 file must read exactly like UTF-8: column names, values and sniffed types
 query III
-FROM read_csv('data/cp932/municipal.csv', encoding='${enc}')
+FROM read_csv('data/cp932/municipal.csv', encoding='{enc}')
 ----
 013000	Sapporo	1000
 
 query I
-SELECT list(column_type) FROM (DESCRIBE FROM read_csv('data/cp932/municipal.csv', encoding='${enc}'))
+SELECT list(column_type) FROM (DESCRIBE FROM read_csv('data/cp932/municipal.csv', encoding='{enc}'))
 ----
 [VARCHAR, VARCHAR, BIGINT]
 
 # NEC special characters, IBM extensions, Microsoft's 0x5C -> '\' and 0x7E -> '~', and U+FF5E / U+FF0D kept as-is
 query II
-FROM read_csv('data/cp932/notes.csv', encoding='${enc}')
+FROM read_csv('data/cp932/notes.csv', encoding='{enc}')
 ----
 Sapporo	ok
 Hakodate	㈱survey ①②③ 髙
@@ -27,7 +27,7 @@ Otaru	C:\path~ ～－
 
 # One character from every CP932 block, as raw bytes
 query II
-FROM read_csv('data/cp932/blocks.csv', encoding='${enc}')
+FROM read_csv('data/cp932/blocks.csv', encoding='{enc}')
 ----
 jis_l1	あいう漢字
 nec_toku	①②㈱

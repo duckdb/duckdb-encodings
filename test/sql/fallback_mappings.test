@@ -7,22 +7,22 @@ require encodings
 # Plain ASCII input: every byte is a 1-1 roundtrip mapping (|0) in windows-1252-2000.ucm.
 # The .ucm also lists fullwidth fallbacks for these bytes (e.g. <UFF54> \x74 |1), which must be ignored when decoding.
 statement ok
-COPY (SELECT 'test' AS a, 'data' AS b) TO '__TEST_DIR__/issue_10.csv' (FORMAT CSV, HEADER false);
+COPY (SELECT 'test' AS a, 'data' AS b) TO '{TEST_DIR}/issue_10.csv' (FORMAT CSV, HEADER false);
 
 # Control: the plain cp1252 mapping has no fallbacks and decodes correctly
 query I
-SELECT a FROM read_csv('__TEST_DIR__/issue_10.csv', encoding='CP1252', header=false, delim='', quote='', columns={'a': 'VARCHAR'})
+SELECT a FROM read_csv('{TEST_DIR}/issue_10.csv', encoding='CP1252', header=false, delim='', quote='', columns={'a': 'VARCHAR'})
 ----
 test,data
 
 # windows-1252-2000 must decode ASCII to ASCII, not to fullwidth forms (ｔｅｓｔ，ｄａｔａ)
 query I
-SELECT a FROM read_csv('__TEST_DIR__/issue_10.csv', encoding='windows-1252-2000', header=false, delim='', quote='', columns={'a': 'VARCHAR'})
+SELECT a FROM read_csv('{TEST_DIR}/issue_10.csv', encoding='windows-1252-2000', header=false, delim='', quote='', columns={'a': 'VARCHAR'})
 ----
 test,data
 
 # The comma must also survive so the CSV parser sees two columns
 query II
-FROM read_csv('__TEST_DIR__/issue_10.csv', encoding='windows-1252-2000', header=false)
+FROM read_csv('{TEST_DIR}/issue_10.csv', encoding='windows-1252-2000', header=false)
 ----
 test	data

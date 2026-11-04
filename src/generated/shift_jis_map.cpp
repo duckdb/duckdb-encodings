@@ -7081,17 +7081,8 @@ static const char *const shift_jis_aliases[] = {"csshiftjis", "s-jis", "s_jis", 
                                                 "shiftjis",   "sjis",  "x-mac-japanese", "x_mac_japanese"};
 
 void Shift_jisToUtf::Register(const DBConfig &config) {
-	const Shift_jisToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                shift_jis_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : shift_jis_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      shift_jis_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "shift_jis", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, shift_jis_to_utf8,
+	                          7069, shift_jis_aliases, 8);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

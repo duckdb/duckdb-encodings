@@ -93,11 +93,8 @@ static const map_entry_encoding java_KOI8_R_1_3_P_to_utf8[] = {
     {1, "\xFF", 2, "\xD0\xAA"},
 };
 void Java_koi8_r_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_koi8_r_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_KOI8_R_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-KOI8_R-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          java_KOI8_R_1_3_P_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

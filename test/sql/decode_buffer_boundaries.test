@@ -9,7 +9,7 @@ require encodings
 foreach buffer_size 64 65 66 100 1000
 
 query I
-SELECT string_agg(v, '|') FROM read_csv('data/boundaries/inis_8_passthrough.csv', encoding='INIS_8', header=false, delim='', quote='', escape='', columns={'v': 'VARCHAR'}, buffer_size=${buffer_size})
+SELECT string_agg(v, '|') FROM read_csv('data/boundaries/inis_8_passthrough.csv', encoding='INIS_8', header=false, delim='', quote='', escape='', columns={'v': 'VARCHAR'}, buffer_size={buffer_size})
 ----
 αα|αα|αα|αα|αα|αα|αα|αα|αα|αα|αα|αα|ααA|ΣΣ|ΣΣ|ΣΣ|ΣΣ
 

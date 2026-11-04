@@ -9428,11 +9428,8 @@ static const map_entry_encoding glibc_CP932_2_3_3_to_utf8[] = {
     {2, "\xFC\x4B", 3, "\xE9\xBB\x91"},
 };
 void Glibc_cp932_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_cp932_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_CP932_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-CP932-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          glibc_CP932_2_3_3_to_utf8, 9421);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -141,11 +141,8 @@ static const map_entry_encoding glibc_ANSI_X3_110_2_3_3_to_utf8[] = {
     {1, "\xFD", 2, "\xC5\xA7"},     {1, "\xFE", 2, "\xC5\x8B"},
 };
 void Glibc_ansi_x3_110_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_ansi_x3_110_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_ANSI_X3_110_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-ANSI_X3.110-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          glibc_ANSI_X3_110_2_3_3_to_utf8, 401);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -93,11 +93,7 @@ static const map_entry_encoding MAC_UK_to_utf8[] = {
     {1, "\xFF", 2, "\xC2\xA4"},
 };
 void Mac_ukToUtf::Register(const DBConfig &config) {
-	const Mac_ukToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                MAC_UK_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "MAC_UK", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, MAC_UK_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

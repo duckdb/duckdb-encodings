@@ -3126,11 +3126,8 @@ static const map_entry_encoding ibm_928_P100_1995_to_utf8[] = {
     {2, "\xFA\x7A", 3, "\xE2\x96\xBD"}, {2, "\xFA\x7B", 3, "\xE2\x96\xBC"},
 };
 void Ibm_928_p100_1995ToUtf::Register(const DBConfig &config) {
-	const Ibm_928_p100_1995ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_928_P100_1995_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-928_P100-1995", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_928_P100_1995_to_utf8, 9356);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

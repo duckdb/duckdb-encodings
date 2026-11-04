@@ -96,17 +96,8 @@ static const map_entry_encoding HP_ROMAN8_to_utf8[] = {
 static const char *const HP_ROMAN8_aliases[] = {"cp1051", "cshproman8", "hp-roman8", "ibm1051", "r8", "roman8"};
 
 void Hp_roman8ToUtf::Register(const DBConfig &config) {
-	const Hp_roman8ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                HP_ROMAN8_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : HP_ROMAN8_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      HP_ROMAN8_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "HP_ROMAN8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, HP_ROMAN8_to_utf8, 255,
+	                          HP_ROMAN8_aliases, 6);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

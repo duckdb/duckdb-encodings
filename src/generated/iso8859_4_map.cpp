@@ -77,17 +77,8 @@ static const char *const ISO8859_4_aliases[] = {"csisolatin4", "iso-8859-4", "is
                                                 "iso_ir_110",  "l4",         "latin4"};
 
 void Iso8859_4ToUtf::Register(const DBConfig &config) {
-	const Iso8859_4ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ISO8859_4_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : ISO8859_4_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      ISO8859_4_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "ISO8859_4", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO8859_4_to_utf8, 256,
+	                          ISO8859_4_aliases, 9);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

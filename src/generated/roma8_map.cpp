@@ -93,11 +93,7 @@ static const map_entry_encoding roma8_to_utf8[] = {
     {1, "\xFF", 3, "\xEF\xBF\xBD"},
 };
 void Roma8ToUtf::Register(const DBConfig &config) {
-	const Roma8ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                roma8_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "roma8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, roma8_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

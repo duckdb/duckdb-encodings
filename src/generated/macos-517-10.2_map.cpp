@@ -63,11 +63,8 @@ static const map_entry_encoding macos_517_10_2_to_utf8[] = {
     {1, "\xFC", 2, "\xD1\x9C"},     {1, "\xFD", 2, "\xC2\xA7"}, {1, "\xFE", 2, "\xD1\x9E"}, {1, "\xFF", 2, "\xD1\x9F"},
 };
 void Macos_517_10_2ToUtf::Register(const DBConfig &config) {
-	const Macos_517_10_2ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                macos_517_10_2_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "macos-517-10.2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          macos_517_10_2_to_utf8, 224);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

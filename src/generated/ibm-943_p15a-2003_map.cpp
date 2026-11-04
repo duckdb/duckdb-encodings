@@ -9806,17 +9806,8 @@ static const map_entry_encoding ibm_943_P15A_2003_to_utf8[] = {
 static const char *const ibm_943_P15A_2003_aliases[] = {"ibm-943", "cp943"};
 
 void Ibm_943_p15a_2003ToUtf::Register(const DBConfig &config) {
-	const Ibm_943_p15a_2003ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_943_P15A_2003_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : ibm_943_P15A_2003_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      ibm_943_P15A_2003_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "ibm-943_P15A-2003", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_943_P15A_2003_to_utf8, 9795, ibm_943_P15A_2003_aliases, 2);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

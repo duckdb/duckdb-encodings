@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Iso8859_3ToUtf {
 public:
-	Iso8859_3ToUtf() {};
-	const idx_t lookup_bytes = 1;
-	const idx_t max_bytes_per_byte = 2;
-	const string name = "ISO8859_3";
-	const idx_t size = 249;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

@@ -786,11 +786,8 @@ static const map_entry_encoding IBM_udcJP_GR_to_utf8[] = {
     {2, "\xFD\xAB", 3, "\xE9\xB8\x99"}, {2, "\xFD\xAC", 3, "\xE9\xBB\x91"},
 };
 void Ibm_udcjp_grToUtf::Register(const DBConfig &config) {
-	const Ibm_udcjp_grToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                IBM_udcJP_GR_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "IBM_udcJP_GR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          IBM_udcJP_GR_to_utf8, 2336);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

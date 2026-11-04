@@ -53,11 +53,8 @@ static const map_entry_encoding EBCDIC_CA_FR_to_utf8[] = {
     {1, "\xFF", 2, "\xC2\x9F"},
 };
 void Ebcdic_ca_frToUtf::Register(const DBConfig &config) {
-	const Ebcdic_ca_frToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                EBCDIC_CA_FR_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "EBCDIC_CA_FR", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          EBCDIC_CA_FR_to_utf8, 181);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

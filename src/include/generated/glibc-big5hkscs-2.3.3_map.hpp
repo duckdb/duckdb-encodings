@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Glibc_big5hkscs_2_3_3ToUtf {
 public:
-	Glibc_big5hkscs_2_3_3ToUtf() {};
-	const idx_t lookup_bytes = 2;
-	const idx_t max_bytes_per_byte = 4;
-	const string name = "glibc-BIG5HKSCS-2.3.3";
-	const idx_t size = 18285;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

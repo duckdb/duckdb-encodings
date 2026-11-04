@@ -7077,11 +7077,8 @@ static const map_entry_encoding java_SJIS_1_3_P_to_utf8[] = {
     {2, "\xEA\xA4", 3, "\xE7\x86\x99"},
 };
 void Java_sjis_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_sjis_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_SJIS_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-SJIS-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          java_SJIS_1_3_P_to_utf8, 7070);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

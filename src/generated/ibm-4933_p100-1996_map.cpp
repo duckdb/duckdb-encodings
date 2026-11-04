@@ -7935,11 +7935,8 @@ static const map_entry_encoding ibm_4933_P100_1996_to_utf8[] = {
     {2, "\xCE\xA5", 3, "\xEE\xA1\xA3"}, {2, "\xCE\xA6", 3, "\xEE\xA1\xA4"},
 };
 void Ibm_4933_p100_1996ToUtf::Register(const DBConfig &config) {
-	const Ibm_4933_p100_1996ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_4933_P100_1996_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-4933_P100-1996", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_4933_P100_1996_to_utf8, 23783);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

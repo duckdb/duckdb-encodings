@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Jisx0201_1976_0ToUtf {
 public:
-	Jisx0201_1976_0ToUtf() {};
-	const idx_t lookup_bytes = 1;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "JISX0201.1976_0";
-	const idx_t size = 191;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

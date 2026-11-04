@@ -1,4 +1,5 @@
 #include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 #include "duckdb/execution/operator/csv_scanner/encode/csv_encoder.hpp"
 
@@ -135,6 +136,17 @@ const map_entry_encoding *GeneratedEncodedFunction::FindEntry(const map_entry_en
 		return it;
 	}
 	return nullptr;
+}
+
+void RegisterGeneratedEncoding(const DBConfig &config, const char *name, size_t max_bytes_per_byte, size_t lookup_bytes,
+                               const map_entry_encoding *map, size_t map_size, const char *const *aliases,
+                               size_t alias_count) {
+	config.RegisterEncodeFunction(
+	    EncodingFunction(name, GeneratedEncodedFunction::Decode, max_bytes_per_byte, lookup_bytes, map, map_size));
+	for (size_t i = 0; i < alias_count; i++) {
+		config.RegisterEncodeFunction(EncodingFunction(aliases[i], GeneratedEncodedFunction::Decode, max_bytes_per_byte,
+		                                               lookup_bytes, map, map_size));
+	}
 }
 
 } // namespace duckdb_encodings

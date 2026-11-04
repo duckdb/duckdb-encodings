@@ -2300,11 +2300,8 @@ static const map_entry_encoding ibm_955_P110_1997_to_utf8[] = {
     {2, "\x74\x24", 3, "\xE7\x91\xB6"}, {2, "\x74\x25", 3, "\xE5\x87\x9C"}, {2, "\x74\x26", 3, "\xE7\x86\x99"},
 };
 void Ibm_955_p110_1997ToUtf::Register(const DBConfig &config) {
-	const Ibm_955_p110_1997ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_955_P110_1997_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-955_P110-1997", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_955_P110_1997_to_utf8, 6879);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

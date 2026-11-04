@@ -39,11 +39,8 @@ static const map_entry_encoding glibc_NC_NC00_10_2_3_3_to_utf8[] = {
     {1, "\x7C", 2, "\xC3\xB1"}, {1, "\x7D", 1, "\x5B"}, {1, "\x7E", 2, "\xC2\xA8"}, {1, "\x7F", 1, "\x7F"},
 };
 void Glibc_nc_nc00_10_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_nc_nc00_10_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_NC_NC00_10_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-NC_NC00_10-2.3.3", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          glibc_NC_NC00_10_2_3_3_to_utf8, 128);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

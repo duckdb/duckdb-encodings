@@ -13838,11 +13838,8 @@ static const map_entry_encoding java_Big5_1_3_P_to_utf8[] = {
     {2, "\xF9\xD5", 3, "\xE9\xBE\x98"},
 };
 void Java_big5_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_big5_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_Big5_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-Big5-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          java_Big5_1_3_P_to_utf8, 13831);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

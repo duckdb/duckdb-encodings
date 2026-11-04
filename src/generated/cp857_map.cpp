@@ -96,17 +96,8 @@ static const map_entry_encoding cp857_to_utf8[] = {
 static const char *const cp857_aliases[] = {"857", "csibm857", "ibm857"};
 
 void Cp857ToUtf::Register(const DBConfig &config) {
-	const Cp857ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp857_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp857_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp857_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp857", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp857_to_utf8, 253,
+	                          cp857_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -8360,11 +8360,8 @@ static const map_entry_encoding hpux_eucKR_11_11_to_utf8[] = {
     {2, "\xFF\xFF", 3, "\xEF\xBF\xBD"},
 };
 void Hpux_euckr_11_11ToUtf::Register(const DBConfig &config) {
-	const Hpux_euckr_11_11ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                hpux_eucKR_11_11_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "hpux-eucKR-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          hpux_eucKR_11_11_to_utf8, 8353);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

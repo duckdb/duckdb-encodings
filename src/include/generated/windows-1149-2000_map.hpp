@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Windows_1149_2000ToUtf {
 public:
-	Windows_1149_2000ToUtf() {};
-	const idx_t lookup_bytes = 1;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "windows-1149-2000";
-	const idx_t size = 256;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

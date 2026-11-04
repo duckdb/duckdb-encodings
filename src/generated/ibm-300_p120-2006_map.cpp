@@ -3886,11 +3886,8 @@ static const map_entry_encoding ibm_300_P120_2006_to_utf8[] = {
     {2, "\x7F\xFE", 3, "\xEF\x84\x91"},
 };
 void Ibm_300_p120_2006ToUtf::Register(const DBConfig &config) {
-	const Ibm_300_p120_2006ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_300_P120_2006_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-300_P120-2006", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_300_P120_2006_to_utf8, 11635);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

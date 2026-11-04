@@ -9405,11 +9405,7 @@ static const map_entry_encoding IBM_943_to_utf8[] = {
     {2, "\xFC\xFC", 3, "\xEF\xBF\xBD"},
 };
 void Ibm_943ToUtf::Register(const DBConfig &config) {
-	const Ibm_943ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                IBM_943_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "IBM_943", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, IBM_943_to_utf8, 9398);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

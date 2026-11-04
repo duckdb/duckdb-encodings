@@ -68,11 +68,7 @@ static const map_entry_encoding DEC_MCS_to_utf8[] = {
     {1, "\xFD", 2, "\xC3\xBF"},
 };
 void Dec_mcsToUtf::Register(const DBConfig &config) {
-	const Dec_mcsToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                DEC_MCS_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "DEC_MCS", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, DEC_MCS_to_utf8, 241);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

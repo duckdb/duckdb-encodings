@@ -97,17 +97,8 @@ static const map_entry_encoding macos_7_3_10_2_to_utf8[] = {
 static const char *const macos_7_3_10_2_aliases[] = {"mac-cyrillic", "mac_cyrillic", "maccyrillic"};
 
 void Macos_7_3_10_2ToUtf::Register(const DBConfig &config) {
-	const Macos_7_3_10_2ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                macos_7_3_10_2_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : macos_7_3_10_2_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      macos_7_3_10_2_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "macos-7_3-10.2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          macos_7_3_10_2_to_utf8, 256, macos_7_3_10_2_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

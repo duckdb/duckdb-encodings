@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Java_cp943_1_2_2ToUtf {
 public:
-	Java_cp943_1_2_2ToUtf() {};
-	const idx_t lookup_bytes = 2;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "java-Cp943-1.2.2";
-	const idx_t size = 9590;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

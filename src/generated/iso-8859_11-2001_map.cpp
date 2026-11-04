@@ -95,17 +95,8 @@ static const char *const iso_8859_11_2001_aliases[] = {"iso-8859-11", "iso-8859-
                                                        "iso8859_11",  "iso_8859_11_2001", "thai"};
 
 void Iso_8859_11_2001ToUtf::Register(const DBConfig &config) {
-	const Iso_8859_11_2001ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                iso_8859_11_2001_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : iso_8859_11_2001_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      iso_8859_11_2001_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "iso-8859_11-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          iso_8859_11_2001_to_utf8, 248, iso_8859_11_2001_aliases, 6);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

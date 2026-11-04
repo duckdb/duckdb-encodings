@@ -38,11 +38,8 @@ static const map_entry_encoding GREEK_CCITT_to_utf8[] = {
     {1, "\x7C", 1, "\x7C"},     {1, "\x7D", 1, "\x7D"},     {1, "\x7E", 2, "\xC2\xAF"}, {1, "\x7F", 1, "\x7F"},
 };
 void Greek_ccittToUtf::Register(const DBConfig &config) {
-	const Greek_ccittToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                GREEK_CCITT_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "GREEK_CCITT", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, GREEK_CCITT_to_utf8,
+	                          124);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

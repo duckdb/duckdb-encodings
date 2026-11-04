@@ -90,11 +90,7 @@ static const map_entry_encoding thai8_to_utf8[] = {
     {1, "\xFA", 3, "\xE0\xB9\x9A"}, {1, "\xFB", 3, "\xE0\xB9\x9B"},
 };
 void Thai8ToUtf::Register(const DBConfig &config) {
-	const Thai8ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                thai8_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "thai8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, thai8_to_utf8, 248);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

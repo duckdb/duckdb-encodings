@@ -90,11 +90,8 @@ static const map_entry_encoding glibc_ARMSCII_8_2_3_3_to_utf8[] = {
     {1, "\xFC", 2, "\xD5\x96"},     {1, "\xFD", 2, "\xD6\x86"}, {1, "\xFE", 2, "\xD5\x9A"},
 };
 void Glibc_armscii_8_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_armscii_8_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_ARMSCII_8_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-ARMSCII_8-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          glibc_ARMSCII_8_2_3_3_to_utf8, 249);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

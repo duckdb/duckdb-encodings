@@ -91,11 +91,8 @@ static const map_entry_encoding hpux_greee_11_11_to_utf8[] = {
     {1, "\xFE", 2, "\xC2\xBB"},     {1, "\xFF", 1, "\x7F"},
 };
 void Hpux_greee_11_11ToUtf::Register(const DBConfig &config) {
-	const Hpux_greee_11_11ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                hpux_greee_11_11_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "hpux-greee-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          hpux_greee_11_11_to_utf8, 251);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

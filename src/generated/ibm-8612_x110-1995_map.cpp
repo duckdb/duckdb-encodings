@@ -57,11 +57,8 @@ static const map_entry_encoding ibm_8612_X110_1995_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},     {1, "\xFF", 2, "\xC2\x9F"},
 };
 void Ibm_8612_x110_1995ToUtf::Register(const DBConfig &config) {
-	const Ibm_8612_x110_1995ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_8612_X110_1995_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-8612_X110-1995", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          ibm_8612_X110_1995_to_utf8, 199);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

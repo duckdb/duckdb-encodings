@@ -17180,11 +17180,8 @@ static const map_entry_encoding java_Johab_1_3_P_to_utf8[] = {
     {2, "\xF9\xFE", 3, "\xE8\xA9\xB0"},
 };
 void Java_johab_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_johab_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_Johab_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-Johab-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          java_Johab_1_3_P_to_utf8, 17173);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

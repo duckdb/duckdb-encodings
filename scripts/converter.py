@@ -251,9 +251,7 @@ with open(os.path.join(generated_path, 'registration.hpp'), "w", encoding="utf-8
 
 		#pragma once
 
-		#include "duckdb/main/config.hpp"
-		#include "duckdb/function/encoding_function.hpp"
-		#include "generated_encoded_function.hpp"
+		#include "encoding_registration.hpp"
 
 		namespace duckdb {{
 		namespace duckdb_encodings {{
@@ -283,13 +281,7 @@ with open(os.path.join(generated_path, 'registration.hpp'), "w", encoding="utf-8
 				cpp_output, max_lookup, max_output, map_size = generate_cpp_map(encoding_class_name,encoding[0], bytemap, encoding[3])
 				out_file.write(header_encoding_generated)
 				class_top = f'''class {encoding_class_name}ToUtf {{
-		public:
-			{encoding_class_name}ToUtf() {{}};
-			const idx_t lookup_bytes = {max_lookup};
-			const idx_t max_bytes_per_byte = {max_output};
-			const string name = "{encoding[0]}";
-			const idx_t size = {map_size};
-			'''
+		public:'''
 				out_file.write(class_top)
 				out_file.write(class_bottom)
 				out_file.write(footer_encoding_generted)
@@ -314,27 +306,18 @@ namespace duckdb_encodings {{
 							aliases.append(alias)
 				alias_comment = f'the names Python accepts for its codec "{python_codec}"' if python_codec else 'commonly used names'
 				alias_array = ''
-				alias_registration = ''
+				alias_arguments = ''
 				if aliases:
 					alias_array = f'''
 
 	// Aliases of "{encoding[0]}": {alias_comment}
 	static const char *const {encoding_map_name}_aliases[] = {{{', '.join(f'"{alias}"' for alias in aliases)}}};
 	'''
-					alias_registration = f'''
-					for (const auto *alias : {encoding_map_name}_aliases) {{
-						const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-														generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-														{encoding_map_name}_to_utf8, generated_function.size);
-						config.RegisterEncodeFunction(alias_function);
-					}}'''
+					alias_arguments = f', {encoding_map_name}_aliases, {len(aliases)}'
 				class_bottom = f'''{alias_array}
 				void {encoding_class_name}ToUtf::Register(const DBConfig &config) {{
-					const {encoding_class_name}ToUtf generated_function;
-					const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-													generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-													{encoding_map_name}_to_utf8, generated_function.size);
-					config.RegisterEncodeFunction(function);{alias_registration}
+					RegisterGeneratedEncoding(config, "{encoding[0]}", /*max_bytes_per_byte*/ {max_output}, /*lookup_bytes*/ {max_lookup},
+					                          {encoding_map_name}_to_utf8, {map_size}{alias_arguments});
 				}}
 	}} // namespace duckdb_encodings
 	}} // namespace duckdb

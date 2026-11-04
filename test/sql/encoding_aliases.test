@@ -5,13 +5,13 @@
 require encodings
 
 statement ok
-COPY (SELECT 'test' AS a, 'data' AS b) TO '__TEST_DIR__/aliases.csv' (FORMAT CSV, HEADER false);
+COPY (SELECT 'test' AS a, 'data' AS b) TO '{TEST_DIR}/aliases.csv' (FORMAT CSV, HEADER false);
 
 # Names exactly as chardet reports them (mixed case, '-' separators)
 foreach enc windows-1250 windows-1251 windows-1252 windows-1253 windows-1254 windows-1255 windows-1256 windows-1257 windows-1258 ISO-8859-1 ISO-8859-2 ISO-8859-4 ISO-8859-5 ISO-8859-7 ISO-8859-8 ISO-8859-9 ISO-8859-13 ISO-8859-15 KOI8-R MacRoman MacCyrillic IBM855 IBM866 TIS-620 EUC-JP EUC-KR SHIFT_JIS CP932 CP949 Johab Big5 GB2312 GBK GB18030 EUC-TW
 
 query II
-FROM read_csv('__TEST_DIR__/aliases.csv', encoding='${enc}', header=false)
+FROM read_csv('{TEST_DIR}/aliases.csv', encoding='{enc}', header=false)
 ----
 test	data
 
@@ -21,7 +21,7 @@ endloop
 foreach enc cp1252 iso8859-4 iso8859_4 latin1 l4 koi8-r mac-roman macintosh sjis euc_kr euckr cp936 ms932 tis620 us-ascii
 
 query II
-FROM read_csv('__TEST_DIR__/aliases.csv', encoding='${enc}', header=false)
+FROM read_csv('{TEST_DIR}/aliases.csv', encoding='{enc}', header=false)
 ----
 test	data
 

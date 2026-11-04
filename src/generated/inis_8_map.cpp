@@ -31,11 +31,7 @@ static const map_entry_encoding INIS_8_to_utf8[] = {
     {1, "\x7D", 2, "\xCF\x89"},     {1, "\x7E", 2, "\xCF\x80"},     {1, "\x7F", 1, "\x7F"},
 };
 void Inis_8ToUtf::Register(const DBConfig &config) {
-	const Inis_8ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                INIS_8_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "INIS_8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, INIS_8_to_utf8, 72);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

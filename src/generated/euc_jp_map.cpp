@@ -13148,17 +13148,8 @@ static const map_entry_encoding EUC_JP_to_utf8[] = {
 static const char *const EUC_JP_aliases[] = {"euc-jp", "eucjp", "u-jis", "u_jis", "ujis"};
 
 void Euc_jpToUtf::Register(const DBConfig &config) {
-	const Euc_jpToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                EUC_JP_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : EUC_JP_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      EUC_JP_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "EUC_JP", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3, EUC_JP_to_utf8, 13137,
+	                          EUC_JP_aliases, 5);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

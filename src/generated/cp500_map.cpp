@@ -76,17 +76,8 @@ static const char *const cp500_aliases[] = {"500",          "csibm500",     "ebc
                                             "ebcdic_cp_be", "ebcdic_cp_ch", "ibm500"};
 
 void Cp500ToUtf::Register(const DBConfig &config) {
-	const Cp500ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp500_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp500_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp500_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp500", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, cp500_to_utf8, 256,
+	                          cp500_aliases, 7);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -20402,11 +20402,8 @@ static const map_entry_encoding ibm_948_X110_1999_to_utf8[] = {
     {1, "\xFE", 2, "\xC2\xA6"},
 };
 void Ibm_948_x110_1999ToUtf::Register(const DBConfig &config) {
-	const Ibm_948_x110_1999ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_948_X110_1999_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-948_X110-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_948_X110_1999_to_utf8, 20395);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

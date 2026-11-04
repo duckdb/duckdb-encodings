@@ -13144,11 +13144,8 @@ static const map_entry_encoding java_EUC_JP_1_3_P_to_utf8[] = {
     {2, "\xF4\xA6", 3, "\xE7\x86\x99"},
 };
 void Java_euc_jp_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_euc_jp_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_EUC_JP_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-EUC_JP-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
+	                          java_EUC_JP_1_3_P_to_utf8, 13137);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

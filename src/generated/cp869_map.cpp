@@ -94,17 +94,8 @@ static const map_entry_encoding cp869_to_utf8[] = {
 static const char *const cp869_aliases[] = {"869", "cp-gr", "cp_gr", "csibm869", "ibm869"};
 
 void Cp869ToUtf::Register(const DBConfig &config) {
-	const Cp869ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp869_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp869_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp869_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp869", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp869_to_utf8, 247,
+	                          cp869_aliases, 5);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

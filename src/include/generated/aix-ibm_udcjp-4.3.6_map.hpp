@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Aix_ibm_udcjp_4_3_6ToUtf {
 public:
-	Aix_ibm_udcjp_4_3_6ToUtf() {};
-	const idx_t lookup_bytes = 2;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "aix-IBM_udcJP-4.3.6";
-	const idx_t size = 2336;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

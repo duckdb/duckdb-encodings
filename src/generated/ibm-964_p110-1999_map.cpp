@@ -20433,17 +20433,8 @@ static const map_entry_encoding ibm_964_P110_1999_to_utf8[] = {
 static const char *const ibm_964_P110_1999_aliases[] = {"euc-tw", "euctw"};
 
 void Ibm_964_p110_1999ToUtf::Register(const DBConfig &config) {
-	const Ibm_964_p110_1999ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_964_P110_1999_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : ibm_964_P110_1999_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      ibm_964_P110_1999_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "ibm-964_P110-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4,
+	                          ibm_964_P110_1999_to_utf8, 20422, ibm_964_P110_1999_aliases, 2);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

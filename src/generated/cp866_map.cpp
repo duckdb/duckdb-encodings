@@ -97,17 +97,8 @@ static const map_entry_encoding cp866_to_utf8[] = {
 static const char *const cp866_aliases[] = {"866", "csibm866", "ibm866"};
 
 void Cp866ToUtf::Register(const DBConfig &config) {
-	const Cp866ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp866_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp866_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp866_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp866", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp866_to_utf8, 256,
+	                          cp866_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

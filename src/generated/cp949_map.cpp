@@ -5693,17 +5693,8 @@ static const map_entry_encoding cp949_to_utf8[] = {
 static const char *const cp949_aliases[] = {"949", "ms949", "uhc"};
 
 void Cp949ToUtf::Register(const DBConfig &config) {
-	const Cp949ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp949_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp949_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp949_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp949", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, cp949_to_utf8, 17046,
+	                          cp949_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

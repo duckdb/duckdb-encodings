@@ -92,11 +92,8 @@ static const map_entry_encoding java_Cp1112_1_3_P_to_utf8[] = {
     {1, "\xFE", 2, "\xC5\x9A"},     {1, "\xFF", 2, "\xC2\x9F"},
 };
 void Java_cp1112_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_cp1112_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_Cp1112_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-Cp1112-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          java_Cp1112_1_3_P_to_utf8, 254);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

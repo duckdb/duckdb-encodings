@@ -93,11 +93,8 @@ static const map_entry_encoding windows_1253_2000_to_utf8[] = {
     {1, "\xFF", 3, "\xEF\xA3\xBB"},
 };
 void Windows_1253_2000ToUtf::Register(const DBConfig &config) {
-	const Windows_1253_2000ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                windows_1253_2000_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "windows-1253-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          windows_1253_2000_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

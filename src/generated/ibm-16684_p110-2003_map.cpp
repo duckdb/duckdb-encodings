@@ -11046,11 +11046,8 @@ static const map_entry_encoding ibm_16684_P110_2003_to_utf8[] = {
     {2, "\xEC\xAB", 3, "\xEF\xB9\x86"},
 };
 void Ibm_16684_p110_2003ToUtf::Register(const DBConfig &config) {
-	const Ibm_16684_p110_2003ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_16684_P110_2003_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-16684_P110-2003", /*max_bytes_per_byte*/ 4, /*lookup_bytes*/ 2,
+	                          ibm_16684_P110_2003_to_utf8, 22077);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb
