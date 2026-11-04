@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Euc_krToUtf {
 public:
-	Euc_krToUtf() {};
-	const idx_t lookup_bytes = 2;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "EUC_KR";
-	const idx_t size = 8352;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

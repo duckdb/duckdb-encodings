@@ -93,11 +93,8 @@ static const map_entry_encoding IEC_P27_1_to_utf8[] = {
     {1, "\xFF", 3, "\xE2\x80\xBE"},
 };
 void Iec_p27_1ToUtf::Register(const DBConfig &config) {
-	const Iec_p27_1ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                IEC_P27_1_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "IEC_P27_1", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IEC_P27_1_to_utf8,
+	                          256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

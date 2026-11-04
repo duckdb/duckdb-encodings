@@ -97,17 +97,8 @@ static const map_entry_encoding CP775_to_utf8[] = {
 static const char *const CP775_aliases[] = {"775", "cspc775baltic", "ibm775"};
 
 void Cp775ToUtf::Register(const DBConfig &config) {
-	const Cp775ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                CP775_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : CP775_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      CP775_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "CP775", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP775_to_utf8, 256,
+	                          CP775_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

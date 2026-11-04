@@ -94,20 +94,11 @@ static const map_entry_encoding windows_874_2000_to_utf8[] = {
 };
 
 // Aliases of "windows-874-2000": the names Python accepts for its codec "cp874"
-static const char *const windows_874_2000_aliases[] = {"cp874"};
+static const char *const windows_874_2000_aliases[] = {"874", "cp874", "ms874", "windows-874", "windows_874"};
 
 void Windows_874_2000ToUtf::Register(const DBConfig &config) {
-	const Windows_874_2000ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                windows_874_2000_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : windows_874_2000_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      windows_874_2000_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "windows-874-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          windows_874_2000_to_utf8, 256, windows_874_2000_aliases, 5);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

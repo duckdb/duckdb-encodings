@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Ebcdic_ca_frToUtf {
 public:
-	Ebcdic_ca_frToUtf() {};
-	const idx_t lookup_bytes = 1;
-	const idx_t max_bytes_per_byte = 2;
-	const string name = "EBCDIC_CA_FR";
-	const idx_t size = 181;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

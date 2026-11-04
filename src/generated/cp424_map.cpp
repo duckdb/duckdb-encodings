@@ -84,17 +84,8 @@ static const map_entry_encoding cp424_to_utf8[] = {
 static const char *const cp424_aliases[] = {"424", "csibm424", "ebcdic-cp-he", "ebcdic_cp_he", "ibm424"};
 
 void Cp424ToUtf::Register(const DBConfig &config) {
-	const Cp424ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp424_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp424_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp424_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp424", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp424_to_utf8, 217,
+	                          cp424_aliases, 5);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -9378,11 +9378,8 @@ static const map_entry_encoding ibm_5050_P120_1999_to_utf8[] = {
     {2, "\xFE\xFE", 3, "\xEE\x8E\xAB"},
 };
 void Ibm_5050_p120_1999ToUtf::Register(const DBConfig &config) {
-	const Ibm_5050_p120_1999ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_5050_P120_1999_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-5050_P120-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
+	                          ibm_5050_P120_1999_to_utf8, 9371);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

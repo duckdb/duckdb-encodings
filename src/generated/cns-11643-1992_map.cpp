@@ -48242,11 +48242,8 @@ static const map_entry_encoding CNS_11643_1992_to_utf8[] = {
     {3, "\x87\x66\x55", 4, "\xF0\xA9\x99\xA4"},
 };
 void Cns_11643_1992ToUtf::Register(const DBConfig &config) {
-	const Cns_11643_1992ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                CNS_11643_1992_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "CNS-11643-1992", /*max_bytes_per_byte*/ 4, /*lookup_bytes*/ 3,
+	                          CNS_11643_1992_to_utf8, 48235);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

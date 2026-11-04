@@ -2811,11 +2811,8 @@ static const map_entry_encoding KSC5601_1987_0_to_utf8[] = {
     {2, "\xFE\xFC", 3, "\xEE\x82\xB9"}, {2, "\xFE\xFD", 3, "\xEE\x82\xBA"}, {2, "\xFE\xFE", 3, "\xEE\x82\xBB"},
 };
 void Ksc5601_1987_0ToUtf::Register(const DBConfig &config) {
-	const Ksc5601_1987_0ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                KSC5601_1987_0_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "KSC5601.1987_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          KSC5601_1987_0_to_utf8, 8412);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

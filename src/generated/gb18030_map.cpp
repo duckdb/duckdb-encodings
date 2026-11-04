@@ -30873,17 +30873,8 @@ static const map_entry_encoding gb18030_to_utf8[] = {
 static const char *const gb18030_aliases[] = {"gb18030-2000", "gb18030_2000"};
 
 void Gb18030ToUtf::Register(const DBConfig &config) {
-	const Gb18030ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                gb18030_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : gb18030_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      gb18030_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "gb18030", /*max_bytes_per_byte*/ 4, /*lookup_bytes*/ 4, gb18030_to_utf8, 30862,
+	                          gb18030_aliases, 2);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

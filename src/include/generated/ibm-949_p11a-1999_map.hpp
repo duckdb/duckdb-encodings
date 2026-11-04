@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Ibm_949_p11a_1999ToUtf {
 public:
-	Ibm_949_p11a_1999ToUtf() {};
-	const idx_t lookup_bytes = 2;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "ibm-949_P11A-1999";
-	const idx_t size = 10237;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

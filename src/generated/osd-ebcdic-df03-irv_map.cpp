@@ -64,11 +64,8 @@ static const map_entry_encoding osd_EBCDIC_DF03_IRV_to_utf8[] = {
     {1, "\xFF", 1, "\x7E"},
 };
 void Osd_ebcdic_df03_irvToUtf::Register(const DBConfig &config) {
-	const Osd_ebcdic_df03_irvToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                osd_EBCDIC_DF03_IRV_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "osd-EBCDIC-DF03-IRV", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          osd_EBCDIC_DF03_IRV_to_utf8, 225);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -15243,11 +15243,8 @@ static const map_entry_encoding glibc_EUC_JP_MS_2_3_3_to_utf8[] = {
     {2, "\xFE\xFE", 3, "\xEE\x8E\xAB"},
 };
 void Glibc_euc_jp_ms_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_euc_jp_ms_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_EUC_JP_MS_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-EUC_JP_MS-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
+	                          glibc_EUC_JP_MS_2_3_3_to_utf8, 15236);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

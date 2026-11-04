@@ -9597,11 +9597,8 @@ static const map_entry_encoding java_Cp943_1_2_2_to_utf8[] = {
     {1, "\xFF", 1, "\x7E"},
 };
 void Java_cp943_1_2_2ToUtf::Register(const DBConfig &config) {
-	const Java_cp943_1_2_2ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_Cp943_1_2_2_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-Cp943-1.2.2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          java_Cp943_1_2_2_to_utf8, 9590);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

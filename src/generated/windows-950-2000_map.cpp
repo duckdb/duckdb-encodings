@@ -19861,17 +19861,8 @@ static const map_entry_encoding windows_950_2000_to_utf8[] = {
 static const char *const windows_950_2000_aliases[] = {"950", "cp950", "ms950"};
 
 void Windows_950_2000ToUtf::Register(const DBConfig &config) {
-	const Windows_950_2000ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                windows_950_2000_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : windows_950_2000_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      windows_950_2000_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "windows-950-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          windows_950_2000_to_utf8, 19850, windows_950_2000_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

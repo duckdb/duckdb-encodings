@@ -9404,11 +9404,8 @@ static const map_entry_encoding java_MS932_1_3_P_to_utf8[] = {
     {2, "\xFC\x4B", 3, "\xE9\xBB\x91"},
 };
 void Java_ms932_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_ms932_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_MS932_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-MS932-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          java_MS932_1_3_P_to_utf8, 9397);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

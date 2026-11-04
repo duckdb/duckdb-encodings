@@ -39,11 +39,8 @@ static const map_entry_encoding windows_20106_2000_to_utf8[] = {
     {1, "\x7C", 2, "\xC3\xB6"}, {1, "\x7D", 2, "\xC3\xBC"}, {1, "\x7E", 2, "\xC3\x9F"}, {1, "\x7F", 1, "\x7F"},
 };
 void Windows_20106_2000ToUtf::Register(const DBConfig &config) {
-	const Windows_20106_2000ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                windows_20106_2000_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "windows-20106-2000", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          windows_20106_2000_to_utf8, 128);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

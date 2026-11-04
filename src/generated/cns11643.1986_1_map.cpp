@@ -1979,11 +1979,8 @@ static const map_entry_encoding CNS11643_1986_1_to_utf8[] = {
     {2, "\x7D\x49", 3, "\xE9\xB8\x9B"}, {2, "\x7D\x4A", 3, "\xE9\xB8\x9E"}, {2, "\x7D\x4B", 3, "\xE7\xB1\xB2"},
 };
 void Cns11643_1986_1ToUtf::Register(const DBConfig &config) {
-	const Cns11643_1986_1ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                CNS11643_1986_1_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "CNS11643.1986_1", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          CNS11643_1986_1_to_utf8, 5916);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

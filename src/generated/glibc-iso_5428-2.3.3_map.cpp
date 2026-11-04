@@ -43,11 +43,8 @@ static const map_entry_encoding glibc_ISO_5428_2_3_3_to_utf8[] = {
     {1, "\x7E", 2, "\xCF\xA1"},     {1, "\x7F", 1, "\x7F"},
 };
 void Glibc_iso_5428_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_iso_5428_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_ISO_5428_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-ISO_5428-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          glibc_ISO_5428_2_3_3_to_utf8, 107);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

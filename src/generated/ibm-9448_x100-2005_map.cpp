@@ -93,11 +93,8 @@ static const map_entry_encoding ibm_9448_X100_2005_to_utf8[] = {
     {1, "\xFF", 2, "\xDB\x92"},
 };
 void Ibm_9448_x100_2005ToUtf::Register(const DBConfig &config) {
-	const Ibm_9448_x100_2005ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_9448_X100_2005_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-9448_X100-2005", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          ibm_9448_X100_2005_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

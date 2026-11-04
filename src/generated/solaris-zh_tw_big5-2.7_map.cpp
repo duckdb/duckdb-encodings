@@ -13838,11 +13838,8 @@ static const map_entry_encoding solaris_zh_TW_big5_2_7_to_utf8[] = {
     {2, "\xF9\xD5", 3, "\xE9\xBE\x98"},
 };
 void Solaris_zh_tw_big5_2_7ToUtf::Register(const DBConfig &config) {
-	const Solaris_zh_tw_big5_2_7ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                solaris_zh_TW_big5_2_7_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "solaris-zh_TW_big5-2.7", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          solaris_zh_TW_big5_2_7_to_utf8, 13831);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

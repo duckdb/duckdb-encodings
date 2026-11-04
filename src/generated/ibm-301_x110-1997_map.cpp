@@ -3056,11 +3056,8 @@ static const map_entry_encoding ibm_301_X110_1997_to_utf8[] = {
     {2, "\xFC\x4B", 3, "\xE9\xBB\x91"},
 };
 void Ibm_301_x110_1997ToUtf::Register(const DBConfig &config) {
-	const Ibm_301_x110_1997ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_301_X110_1997_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-301_X110-1997", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_301_X110_1997_to_utf8, 9145);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

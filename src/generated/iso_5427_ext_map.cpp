@@ -26,11 +26,8 @@ static const map_entry_encoding ISO_5427_EXT_to_utf8[] = {
     {1, "\x71", 2, "\xD1\xB2"}, {1, "\x72", 2, "\xD1\xB4"}, {1, "\x73", 2, "\xD1\xAA"}, {1, "\x7F", 1, "\x7F"},
 };
 void Iso_5427_extToUtf::Register(const DBConfig &config) {
-	const Iso_5427_extToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ISO_5427_EXT_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ISO_5427_EXT", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          ISO_5427_EXT_to_utf8, 76);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

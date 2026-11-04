@@ -8359,11 +8359,8 @@ static const map_entry_encoding java_EUC_KR_1_3_P_to_utf8[] = {
     {2, "\xFD\xFE", 3, "\xE8\xA9\xB0"},
 };
 void Java_euc_kr_1_3_pToUtf::Register(const DBConfig &config) {
-	const Java_euc_kr_1_3_pToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                java_EUC_KR_1_3_P_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "java-EUC_KR-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          java_EUC_KR_1_3_P_to_utf8, 8352);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

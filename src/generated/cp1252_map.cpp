@@ -95,17 +95,8 @@ static const map_entry_encoding CP1252_to_utf8[] = {
 static const char *const CP1252_aliases[] = {"1252", "windows-1252", "windows_1252"};
 
 void Cp1252ToUtf::Register(const DBConfig &config) {
-	const Cp1252ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                CP1252_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : CP1252_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      CP1252_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "CP1252", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP1252_to_utf8, 251,
+	                          CP1252_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

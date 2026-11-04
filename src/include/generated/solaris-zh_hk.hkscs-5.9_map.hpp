@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Solaris_zh_hk_hkscs_5_9ToUtf {
 public:
-	Solaris_zh_hk_hkscs_5_9ToUtf() {};
-	const idx_t lookup_bytes = 2;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "solaris-zh_HK.hkscs-5.9";
-	const idx_t size = 18284;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

@@ -71,11 +71,7 @@ static const map_entry_encoding _8859_10_to_utf8[] = {
     {1, "\xFC", 2, "\xC3\xBC"}, {1, "\xFD", 2, "\xC3\xBD"},     {1, "\xFE", 2, "\xC3\xBE"}, {1, "\xFF", 2, "\xC4\xB8"},
 };
 void _8859_10ToUtf::Register(const DBConfig &config) {
-	const _8859_10ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                _8859_10_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "8859_10", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, _8859_10_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -13839,11 +13839,8 @@ static const map_entry_encoding hpux_big5_11_11_to_utf8[] = {
     {2, "\xFE\xFE", 3, "\xEF\xBF\xBD"},
 };
 void Hpux_big5_11_11ToUtf::Register(const DBConfig &config) {
-	const Hpux_big5_11_11ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                hpux_big5_11_11_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "hpux-big5-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          hpux_big5_11_11_to_utf8, 13832);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

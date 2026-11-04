@@ -140,11 +140,8 @@ static const map_entry_encoding ANSI_X3_110_to_utf8[] = {
     {1, "\xFD", 2, "\xC5\xA7"},     {1, "\xFE", 2, "\xC5\x8B"},
 };
 void Ansi_x3_110ToUtf::Register(const DBConfig &config) {
-	const Ansi_x3_110ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ANSI_X3_110_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ANSI_X3.110", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, ANSI_X3_110_to_utf8,
+	                          398);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

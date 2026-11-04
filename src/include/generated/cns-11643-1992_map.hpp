@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Cns_11643_1992ToUtf {
 public:
-	Cns_11643_1992ToUtf() {};
-	const idx_t lookup_bytes = 3;
-	const idx_t max_bytes_per_byte = 4;
-	const string name = "CNS-11643-1992";
-	const idx_t size = 48235;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

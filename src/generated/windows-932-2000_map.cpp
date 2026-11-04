@@ -9812,17 +9812,8 @@ static const char *const windows_932_2000_aliases[] = {"932",      "cp932",   "m
                                                        "ms_kanji", "mskanji", "windows-31j", "windows_31j"};
 
 void Windows_932_2000ToUtf::Register(const DBConfig &config) {
-	const Windows_932_2000ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                windows_932_2000_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : windows_932_2000_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      windows_932_2000_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "windows-932-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          windows_932_2000_to_utf8, 9800, windows_932_2000_aliases, 8);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -63,21 +63,13 @@ static const map_entry_encoding ISO8859_8_to_utf8[] = {
 };
 
 // Aliases of "ISO8859_8": the names Python accepts for its codec "iso8859_8"
-static const char *const ISO8859_8_aliases[] = {"csisolatinhebrew", "hebrew",    "iso-8859-8",      "iso-8859-8-1988",
-                                                "iso-ir-138",       "iso8859-8", "iso_8859_8_1988", "iso_ir_138"};
+static const char *const ISO8859_8_aliases[] = {"csisolatinhebrew", "hebrew",       "iso-8859-8",   "iso-8859-8-1988",
+                                                "iso-8859-8-e",     "iso-8859-8-i", "iso-ir-138",   "iso8859-8",
+                                                "iso_8859_8_1988",  "iso_8859_8_e", "iso_8859_8_i", "iso_ir_138"};
 
 void Iso8859_8ToUtf::Register(const DBConfig &config) {
-	const Iso8859_8ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ISO8859_8_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : ISO8859_8_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      ISO8859_8_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "ISO8859_8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_8_to_utf8, 218,
+	                          ISO8859_8_aliases, 12);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

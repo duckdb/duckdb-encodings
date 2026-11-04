@@ -10755,11 +10755,8 @@ static const map_entry_encoding ibm_17221_P100_2001_to_utf8[] = {
     {2, "\xF7\x8E", 3, "\xE4\xB6\xBD"}, {2, "\xF7\x8F", 3, "\xE4\xB6\xBE"}, {2, "\xF7\x90", 3, "\xE4\xB6\xBF"},
 };
 void Ibm_17221_p100_2001ToUtf::Register(const DBConfig &config) {
-	const Ibm_17221_p100_2001ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_17221_P100_2001_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-17221_P100-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_17221_P100_2001_to_utf8, 32244);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

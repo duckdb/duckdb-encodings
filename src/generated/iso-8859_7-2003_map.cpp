@@ -92,11 +92,8 @@ static const map_entry_encoding iso_8859_7_2003_to_utf8[] = {
     {1, "\xFE", 2, "\xCF\x8E"},
 };
 void Iso_8859_7_2003ToUtf::Register(const DBConfig &config) {
-	const Iso_8859_7_2003ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                iso_8859_7_2003_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "iso-8859_7-2003", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          iso_8859_7_2003_to_utf8, 253);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

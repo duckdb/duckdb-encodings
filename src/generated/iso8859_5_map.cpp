@@ -76,17 +76,8 @@ static const char *const ISO8859_5_aliases[] = {"csisolatincyrillic", "cyrillic"
                                                 "iso-ir-144",         "iso8859-5", "iso_8859_5_1988", "iso_ir_144"};
 
 void Iso8859_5ToUtf::Register(const DBConfig &config) {
-	const Iso8859_5ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ISO8859_5_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : ISO8859_5_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      ISO8859_5_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "ISO8859_5", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_5_to_utf8, 256,
+	                          ISO8859_5_aliases, 8);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

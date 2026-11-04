@@ -60,11 +60,7 @@ static const map_entry_encoding iso86_to_utf8[] = {
     {1, "\xF0", 2, "\xD9\x90"}, {1, "\xF1", 2, "\xD9\x91"}, {1, "\xF2", 2, "\xD9\x92"},
 };
 void Iso86ToUtf::Register(const DBConfig &config) {
-	const Iso86ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                iso86_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "iso86", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, iso86_to_utf8, 211);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -3209,11 +3209,8 @@ static const map_entry_encoding ibm_941_P12A_1996_to_utf8[] = {
     {2, "\xFC\x4B", 3, "\xE9\xBB\x91"},
 };
 void Ibm_941_p12a_1996ToUtf::Register(const DBConfig &config) {
-	const Ibm_941_p12a_1996ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_941_P12A_1996_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-941_P12A-1996", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_941_P12A_1996_to_utf8, 9604);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

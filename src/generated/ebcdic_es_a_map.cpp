@@ -46,11 +46,8 @@ static const map_entry_encoding EBCDIC_ES_A_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},         {1, "\xFF", 2, "\xC2\x9F"},
 };
 void Ebcdic_es_aToUtf::Register(const DBConfig &config) {
-	const Ebcdic_es_aToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                EBCDIC_ES_A_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "EBCDIC_ES_A", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, EBCDIC_ES_A_to_utf8,
+	                          155);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

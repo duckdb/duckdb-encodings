@@ -97,17 +97,8 @@ static const map_entry_encoding cp862_to_utf8[] = {
 static const char *const cp862_aliases[] = {"862", "cspc862latinhebrew", "ibm862"};
 
 void Cp862ToUtf::Register(const DBConfig &config) {
-	const Cp862ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp862_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp862_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp862_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp862", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp862_to_utf8, 256,
+	                          cp862_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

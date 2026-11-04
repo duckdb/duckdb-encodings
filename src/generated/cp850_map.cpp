@@ -97,17 +97,8 @@ static const map_entry_encoding cp850_to_utf8[] = {
 static const char *const cp850_aliases[] = {"850", "cspc850multilingual", "ibm850"};
 
 void Cp850ToUtf::Register(const DBConfig &config) {
-	const Cp850ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                cp850_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : cp850_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      cp850_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "cp850", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp850_to_utf8, 256,
+	                          cp850_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -13,21 +13,13 @@
 
 #pragma once
 
-#include "duckdb/main/config.hpp"
-#include "duckdb/function/encoding_function.hpp"
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
 
 namespace duckdb {
 namespace duckdb_encodings {
 
 class Java_cp864_1_3_pToUtf {
 public:
-	Java_cp864_1_3_pToUtf() {};
-	const idx_t lookup_bytes = 1;
-	const idx_t max_bytes_per_byte = 3;
-	const string name = "java-Cp864-1.3_P";
-	const idx_t size = 250;
-
 	static void Register(const DBConfig &config);
 };
 } // namespace duckdb_encodings

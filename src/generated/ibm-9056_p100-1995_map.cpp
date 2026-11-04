@@ -54,11 +54,8 @@ static const map_entry_encoding ibm_9056_P100_1995_to_utf8[] = {
     {1, "\xE9", 2, "\xD9\x89"}, {1, "\xEA", 2, "\xD9\x8A"}, {1, "\xF1", 2, "\xD9\x91"},
 };
 void Ibm_9056_p100_1995ToUtf::Register(const DBConfig &config) {
-	const Ibm_9056_p100_1995ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_9056_P100_1995_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-9056_P100-1995", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          ibm_9056_P100_1995_to_utf8, 187);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

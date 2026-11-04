@@ -6762,11 +6762,8 @@ static const map_entry_encoding ibm_947_P100_1995_to_utf8[] = {
     {2, "\xFE\xFD", 3, "\xEE\x8C\x8F"}, {2, "\xFE\xFE", 3, "\xEE\x8C\x90"},
 };
 void Ibm_947_p100_1995ToUtf::Register(const DBConfig &config) {
-	const Ibm_947_p100_1995ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ibm_947_P100_1995_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "ibm-947_P100-1995", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          ibm_947_P100_1995_to_utf8, 20264);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

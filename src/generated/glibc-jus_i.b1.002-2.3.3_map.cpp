@@ -39,11 +39,8 @@ static const map_entry_encoding glibc_JUS_I_B1_002_2_3_3_to_utf8[] = {
     {1, "\x7C", 2, "\xC4\x91"}, {1, "\x7D", 2, "\xC4\x87"}, {1, "\x7E", 2, "\xC4\x8D"}, {1, "\x7F", 1, "\x7F"},
 };
 void Glibc_jus_i_b1_002_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_jus_i_b1_002_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_JUS_I_B1_002_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-JUS_I.B1.002-2.3.3", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          glibc_JUS_I_B1_002_2_3_3_to_utf8, 128);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

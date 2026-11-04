@@ -13144,11 +13144,8 @@ static const map_entry_encoding hpux_eucJPMS_11_11_to_utf8[] = {
     {2, "\xF4\xA6", 3, "\xE7\x86\x99"},
 };
 void Hpux_eucjpms_11_11ToUtf::Register(const DBConfig &config) {
-	const Hpux_eucjpms_11_11ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                hpux_eucJPMS_11_11_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "hpux-eucJPMS-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
+	                          hpux_eucJPMS_11_11_to_utf8, 13137);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -18291,11 +18291,8 @@ static const map_entry_encoding solaris_zh_HK_hkscs_5_9_to_utf8[] = {
     {2, "\xFE\xFE", 3, "\xE7\xA7\x94"},
 };
 void Solaris_zh_hk_hkscs_5_9ToUtf::Register(const DBConfig &config) {
-	const Solaris_zh_hk_hkscs_5_9ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                solaris_zh_HK_hkscs_5_9_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "solaris-zh_HK.hkscs-5.9", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          solaris_zh_HK_hkscs_5_9_to_utf8, 18284);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

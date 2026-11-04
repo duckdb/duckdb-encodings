@@ -50,11 +50,8 @@ static const map_entry_encoding GREEK7_OLD_to_utf8[] = {
     {1, "\x7F", 1, "\x7F"},
 };
 void Greek7_oldToUtf::Register(const DBConfig &config) {
-	const Greek7_oldToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                GREEK7_OLD_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "GREEK7_OLD", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, GREEK7_OLD_to_utf8,
+	                          127);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

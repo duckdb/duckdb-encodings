@@ -97,17 +97,8 @@ static const map_entry_encoding KOI8_U_to_utf8[] = {
 static const char *const KOI8_U_aliases[] = {"koi8-u"};
 
 void Koi8_uToUtf::Register(const DBConfig &config) {
-	const Koi8_uToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                KOI8_U_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : KOI8_U_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      KOI8_U_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "KOI8_U", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, KOI8_U_to_utf8, 256,
+	                          KOI8_U_aliases, 1);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

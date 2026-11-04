@@ -99,17 +99,8 @@ static const char *const iso_8859_16_2001_aliases[] = {
     "iso_8859_16", "iso_8859_16_2001", "iso_ir_226", "l10",        "latin10"};
 
 void Iso_8859_16_2001ToUtf::Register(const DBConfig &config) {
-	const Iso_8859_16_2001ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                iso_8859_16_2001_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : iso_8859_16_2001_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      iso_8859_16_2001_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "iso-8859_16-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          iso_8859_16_2001_to_utf8, 256, iso_8859_16_2001_aliases, 10);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

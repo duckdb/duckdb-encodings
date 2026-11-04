@@ -7078,11 +7078,8 @@ static const map_entry_encoding hpux_sjis_11_11_to_utf8[] = {
     {2, "\xFC\xFC", 3, "\xEF\xBF\xBD"},
 };
 void Hpux_sjis_11_11ToUtf::Register(const DBConfig &config) {
-	const Hpux_sjis_11_11ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                hpux_sjis_11_11_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "hpux-sjis-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          hpux_sjis_11_11_to_utf8, 7071);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

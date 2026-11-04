@@ -41,11 +41,8 @@ static const map_entry_encoding windows_1258_db_2013_to_utf8[] = {
     {2, "\xFD\xDE", 3, "\xE1\xBB\xAF"}, {2, "\xFD\xEC", 3, "\xE1\xBB\xA9"}, {2, "\xFD\xF2", 3, "\xE1\xBB\xB1"},
 };
 void Windows_1258_db_2013ToUtf::Register(const DBConfig &config) {
-	const Windows_1258_db_2013ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                windows_1258_db_2013_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "windows-1258_db-2013", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+	                          windows_1258_db_2013_to_utf8, 102);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

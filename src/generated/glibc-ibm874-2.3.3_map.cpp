@@ -82,11 +82,8 @@ static const map_entry_encoding glibc_IBM874_2_3_3_to_utf8[] = {
     {1, "\xF9", 3, "\xE0\xB9\x99"}, {1, "\xFA", 3, "\xE0\xB9\x9A"}, {1, "\xFB", 3, "\xE0\xB9\x9B"},
 };
 void Glibc_ibm874_2_3_3ToUtf::Register(const DBConfig &config) {
-	const Glibc_ibm874_2_3_3ToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                glibc_IBM874_2_3_3_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
+	RegisterGeneratedEncoding(config, "glibc-IBM874-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+	                          glibc_IBM874_2_3_3_to_utf8, 225);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -60,17 +60,8 @@ static const char *const ascii_aliases[] = {"646",
                                             "us_ascii"};
 
 void AsciiToUtf::Register(const DBConfig &config) {
-	const AsciiToUtf generated_function;
-	const EncodingFunction function(generated_function.name, GeneratedEncodedFunction::Decode,
-	                                generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-	                                ascii_to_utf8, generated_function.size);
-	config.RegisterEncodeFunction(function);
-	for (const auto *alias : ascii_aliases) {
-		const EncodingFunction alias_function(alias, GeneratedEncodedFunction::Decode,
-		                                      generated_function.max_bytes_per_byte, generated_function.lookup_bytes,
-		                                      ascii_to_utf8, generated_function.size);
-		config.RegisterEncodeFunction(alias_function);
-	}
+	RegisterGeneratedEncoding(config, "ascii", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1, ascii_to_utf8, 128,
+	                          ascii_aliases, 18);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb
