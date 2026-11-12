@@ -92,8 +92,8 @@ static const map_entry_encoding cp864_to_utf8[] = {
 // Aliases of "cp864": the names Python accepts for its codec "cp864"
 static const char *const cp864_aliases[] = {"864", "csibm864", "ibm864"};
 
-void Cp864ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp864", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp864_to_utf8, 244,
+void Cp864ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp864", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp864_to_utf8, 244,
 	                          cp864_aliases, 3);
 }
 } // namespace duckdb_encodings

@@ -92,8 +92,8 @@ static const map_entry_encoding glibc_VISCII_2_3_3_to_utf8[] = {
     {1, "\xFC", 3, "\xE1\xBB\xA7"}, {1, "\xFD", 2, "\xC3\xBD"},     {1, "\xFE", 3, "\xE1\xBB\xA3"},
     {1, "\xFF", 3, "\xE1\xBB\xAE"},
 };
-void Glibc_viscii_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-VISCII-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Glibc_viscii_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-VISCII-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          glibc_VISCII_2_3_3_to_utf8, 256);
 }
 } // namespace duckdb_encodings

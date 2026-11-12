@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Jisx0201_1976_grToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -20239,8 +20239,8 @@ static const map_entry_encoding IBM_eucTW_to_utf8[] = {
     {2, "\xFD\xCA", 3, "\xE9\xB8\x9E"},
     {2, "\xFD\xCB", 3, "\xE7\xB1\xB2"},
 };
-void Ibm_euctwToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM_eucTW", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4, IBM_eucTW_to_utf8,
+void Ibm_euctwToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM_eucTW", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4, IBM_eucTW_to_utf8,
 	                          20233);
 }
 } // namespace duckdb_encodings

@@ -54,8 +54,8 @@ static const map_entry_encoding KOI_8_to_utf8[] = {
     {1, "\xF8", 2, "\xD0\xAC"}, {1, "\xF9", 2, "\xD0\xAB"}, {1, "\xFA", 2, "\xD0\x97"}, {1, "\xFB", 2, "\xD0\xA8"},
     {1, "\xFC", 2, "\xD0\xAD"}, {1, "\xFD", 2, "\xD0\xA9"}, {1, "\xFE", 2, "\xD0\xA7"},
 };
-void Koi_8ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "KOI_8", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, KOI_8_to_utf8, 191);
+void Koi_8ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "KOI_8", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, KOI_8_to_utf8, 191);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

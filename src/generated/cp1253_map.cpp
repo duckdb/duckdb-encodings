@@ -90,8 +90,8 @@ static const map_entry_encoding CP1253_to_utf8[] = {
 // Aliases of "CP1253": the names Python accepts for its codec "cp1253"
 static const char *const CP1253_aliases[] = {"1253", "windows-1253", "windows_1253"};
 
-void Cp1253ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "CP1253", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP1253_to_utf8, 239,
+void Cp1253ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "CP1253", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP1253_to_utf8, 239,
 	                          CP1253_aliases, 3);
 }
 } // namespace duckdb_encodings

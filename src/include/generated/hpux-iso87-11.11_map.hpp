@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Hpux_iso87_11_11ToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

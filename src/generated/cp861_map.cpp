@@ -96,8 +96,8 @@ static const map_entry_encoding cp861_to_utf8[] = {
 // Aliases of "cp861": the names Python accepts for its codec "cp861"
 static const char *const cp861_aliases[] = {"861", "cp-is", "cp_is", "csibm861", "ibm861"};
 
-void Cp861ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp861", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp861_to_utf8, 256,
+void Cp861ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp861", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp861_to_utf8, 256,
 	                          cp861_aliases, 5);
 }
 } // namespace duckdb_encodings

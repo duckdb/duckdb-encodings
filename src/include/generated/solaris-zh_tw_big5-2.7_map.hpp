@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Solaris_zh_tw_big5_2_7ToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

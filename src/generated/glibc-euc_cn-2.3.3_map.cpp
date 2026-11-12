@@ -7579,8 +7579,8 @@ static const map_entry_encoding glibc_EUC_CN_2_3_3_to_utf8[] = {
     {2, "\xF7\xFD", 3, "\xE9\xBC\xBE"},
     {2, "\xF7\xFE", 3, "\xE9\xBD\x84"},
 };
-void Glibc_euc_cn_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-EUC_CN-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Glibc_euc_cn_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-EUC_CN-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          glibc_EUC_CN_2_3_3_to_utf8, 7573);
 }
 } // namespace duckdb_encodings

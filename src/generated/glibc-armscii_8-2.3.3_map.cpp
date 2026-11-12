@@ -89,8 +89,8 @@ static const map_entry_encoding glibc_ARMSCII_8_2_3_3_to_utf8[] = {
     {1, "\xF9", 2, "\xD6\x84"},     {1, "\xFA", 2, "\xD5\x95"}, {1, "\xFB", 2, "\xD6\x85"},
     {1, "\xFC", 2, "\xD5\x96"},     {1, "\xFD", 2, "\xD6\x86"}, {1, "\xFE", 2, "\xD5\x9A"},
 };
-void Glibc_armscii_8_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-ARMSCII_8-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Glibc_armscii_8_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-ARMSCII_8-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          glibc_ARMSCII_8_2_3_3_to_utf8, 249);
 }
 } // namespace duckdb_encodings

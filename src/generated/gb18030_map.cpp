@@ -30872,8 +30872,9 @@ static const map_entry_encoding gb18030_to_utf8[] = {
 // Aliases of "gb18030": the names Python accepts for its codec "gb18030"
 static const char *const gb18030_aliases[] = {"gb18030-2000", "gb18030_2000"};
 
-void Gb18030ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "gb18030", /*max_bytes_per_byte*/ 4, /*lookup_bytes*/ 4, gb18030_to_utf8, 30862,
+void Gb18030ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "gb18030", /*max_bytes_per_byte*/ 4, /*lookup_bytes*/ 4, gb18030_to_utf8,
+	                          30862,
 	                          gb18030_aliases, 2);
 }
 } // namespace duckdb_encodings

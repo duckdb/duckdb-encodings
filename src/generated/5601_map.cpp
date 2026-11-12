@@ -8376,8 +8376,8 @@ static const map_entry_encoding _5601_to_utf8[] = {
     {2, "\xFE\xFD", 3, "\xEF\x9E\xBA"},
     {2, "\xFE\xFE", 3, "\xEF\x9E\xBB"},
 };
-void _5601ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "5601", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, _5601_to_utf8, 8370);
+void _5601ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "5601", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, _5601_to_utf8, 8370);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

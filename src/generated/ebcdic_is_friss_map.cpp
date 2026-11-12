@@ -43,8 +43,8 @@ static const map_entry_encoding EBCDIC_IS_FRISS_to_utf8[] = {
     {1, "\xF7", 1, "\x37"},     {1, "\xF8", 1, "\x38"},         {1, "\xF9", 1, "\x39"},     {1, "\xFE", 2, "\xC3\x9A"},
     {1, "\xFF", 1, "\x7F"},
 };
-void Ebcdic_is_frissToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "EBCDIC_IS_FRISS", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Ebcdic_is_frissToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "EBCDIC_IS_FRISS", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          EBCDIC_IS_FRISS_to_utf8, 145);
 }
 } // namespace duckdb_encodings

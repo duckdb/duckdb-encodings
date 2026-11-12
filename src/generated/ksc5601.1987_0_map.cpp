@@ -2810,8 +2810,8 @@ static const map_entry_encoding KSC5601_1987_0_to_utf8[] = {
     {2, "\xFE\xF9", 3, "\xEE\x82\xB6"}, {2, "\xFE\xFA", 3, "\xEE\x82\xB7"}, {2, "\xFE\xFB", 3, "\xEE\x82\xB8"},
     {2, "\xFE\xFC", 3, "\xEE\x82\xB9"}, {2, "\xFE\xFD", 3, "\xEE\x82\xBA"}, {2, "\xFE\xFE", 3, "\xEE\x82\xBB"},
 };
-void Ksc5601_1987_0ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "KSC5601.1987_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Ksc5601_1987_0ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "KSC5601.1987_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          KSC5601_1987_0_to_utf8, 8412);
 }
 } // namespace duckdb_encodings

@@ -78,8 +78,8 @@ static const map_entry_encoding java_TIS620_1_3_P_to_utf8[] = {
     {1, "\xF6", 3, "\xE0\xB9\x96"}, {1, "\xF7", 3, "\xE0\xB9\x97"}, {1, "\xF8", 3, "\xE0\xB9\x98"},
     {1, "\xF9", 3, "\xE0\xB9\x99"}, {1, "\xFA", 3, "\xE0\xB9\x9A"}, {1, "\xFB", 3, "\xE0\xB9\x9B"},
 };
-void Java_tis620_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-TIS620-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Java_tis620_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-TIS620-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          java_TIS620_1_3_P_to_utf8, 216);
 }
 } // namespace duckdb_encodings

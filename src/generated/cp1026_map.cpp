@@ -74,8 +74,8 @@ static const map_entry_encoding cp1026_to_utf8[] = {
 // Aliases of "cp1026": the names Python accepts for its codec "cp1026"
 static const char *const cp1026_aliases[] = {"1026", "csibm1026", "ibm1026"};
 
-void Cp1026ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp1026", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp1026_to_utf8, 256,
+void Cp1026ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp1026", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp1026_to_utf8, 256,
 	                          cp1026_aliases, 3);
 }
 } // namespace duckdb_encodings

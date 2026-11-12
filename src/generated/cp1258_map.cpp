@@ -92,8 +92,8 @@ static const map_entry_encoding CP1258_to_utf8[] = {
 // Aliases of "CP1258": the names Python accepts for its codec "cp1258"
 static const char *const CP1258_aliases[] = {"1258", "windows-1258", "windows_1258"};
 
-void Cp1258ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "CP1258", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP1258_to_utf8, 246,
+void Cp1258ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "CP1258", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP1258_to_utf8, 246,
 	                          CP1258_aliases, 3);
 }
 } // namespace duckdb_encodings

@@ -93,8 +93,8 @@ static const map_entry_encoding cp869_to_utf8[] = {
 // Aliases of "cp869": the names Python accepts for its codec "cp869"
 static const char *const cp869_aliases[] = {"869", "cp-gr", "cp_gr", "csibm869", "ibm869"};
 
-void Cp869ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp869", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp869_to_utf8, 247,
+void Cp869ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp869", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp869_to_utf8, 247,
 	                          cp869_aliases, 5);
 }
 } // namespace duckdb_encodings

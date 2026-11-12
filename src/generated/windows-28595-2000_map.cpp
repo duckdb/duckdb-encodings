@@ -70,8 +70,8 @@ static const map_entry_encoding windows_28595_2000_to_utf8[] = {
     {1, "\xF8", 2, "\xD1\x98"},     {1, "\xF9", 2, "\xD1\x99"}, {1, "\xFA", 2, "\xD1\x9A"}, {1, "\xFB", 2, "\xD1\x9B"},
     {1, "\xFC", 2, "\xD1\x9C"},     {1, "\xFD", 2, "\xC2\xA7"}, {1, "\xFE", 2, "\xD1\x9E"}, {1, "\xFF", 2, "\xD1\x9F"},
 };
-void Windows_28595_2000ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "windows-28595-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Windows_28595_2000ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "windows-28595-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          windows_28595_2000_to_utf8, 256);
 }
 } // namespace duckdb_encodings

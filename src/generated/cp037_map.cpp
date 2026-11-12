@@ -76,8 +76,8 @@ static const char *const cp037_aliases[] = {"037",          "csibm037",     "ebc
                                             "ebcdic-cp-us", "ebcdic-cp-wt", "ebcdic_cp_ca", "ebcdic_cp_nl",
                                             "ebcdic_cp_us", "ebcdic_cp_wt", "ibm037",       "ibm039"};
 
-void Cp037ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp037", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, cp037_to_utf8, 256,
+void Cp037ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp037", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, cp037_to_utf8, 256,
 	                          cp037_aliases, 12);
 }
 } // namespace duckdb_encodings

@@ -59,8 +59,8 @@ static const char *const ascii_aliases[] = {"646",
                                             "us-ascii",
                                             "us_ascii"};
 
-void AsciiToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ascii", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1, ascii_to_utf8, 128,
+void AsciiToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ascii", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1, ascii_to_utf8, 128,
 	                          ascii_aliases, 18);
 }
 } // namespace duckdb_encodings

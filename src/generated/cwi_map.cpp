@@ -92,8 +92,8 @@ static const map_entry_encoding CWI_to_utf8[] = {
     {1, "\xFC", 3, "\xE2\x81\xBF"}, {1, "\xFD", 2, "\xC2\xB2"},     {1, "\xFE", 3, "\xE2\x96\xA0"},
     {1, "\xFF", 2, "\xC2\xA0"},
 };
-void CwiToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "CWI", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CWI_to_utf8, 256);
+void CwiToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "CWI", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CWI_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

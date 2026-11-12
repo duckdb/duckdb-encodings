@@ -96,8 +96,8 @@ static const map_entry_encoding cp855_to_utf8[] = {
 // Aliases of "cp855": the names Python accepts for its codec "cp855"
 static const char *const cp855_aliases[] = {"855", "csibm855", "ibm855"};
 
-void Cp855ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp855", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp855_to_utf8, 256,
+void Cp855ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp855", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp855_to_utf8, 256,
 	                          cp855_aliases, 3);
 }
 } // namespace duckdb_encodings

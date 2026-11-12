@@ -73,8 +73,8 @@ static const map_entry_encoding glibc_ISIRI_3342_2_3_3_to_utf8[] = {
     {1, "\xFA", 2, "\xD8\xA5"},     {1, "\xFB", 2, "\xD8\xA6"}, {1, "\xFC", 2, "\xD8\xA9"},
     {1, "\xFD", 2, "\xD9\x83"},     {1, "\xFE", 2, "\xD9\x8A"},
 };
-void Glibc_isiri_3342_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-ISIRI_3342-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Glibc_isiri_3342_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-ISIRI_3342-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          glibc_ISIRI_3342_2_3_3_to_utf8, 200);
 }
 } // namespace duckdb_encodings

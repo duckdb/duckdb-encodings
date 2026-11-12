@@ -92,8 +92,8 @@ static const map_entry_encoding glibc_MAC_SAMI_2_3_3_to_utf8[] = {
     {1, "\xFC", 2, "\xC7\xA6"},     {1, "\xFD", 2, "\xC7\xA7"},     {1, "\xFE", 2, "\xC7\xA8"},
     {1, "\xFF", 2, "\xC7\xA9"},
 };
-void Glibc_mac_sami_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-MAC_SAMI-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Glibc_mac_sami_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-MAC_SAMI-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          glibc_MAC_SAMI_2_3_3_to_utf8, 256);
 }
 } // namespace duckdb_encodings

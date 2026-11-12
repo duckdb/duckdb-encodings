@@ -49,8 +49,8 @@ static const map_entry_encoding NATS_DANO_to_utf8[] = {
     {1, "\x7B", 2, "\xC3\xA6"},     {1, "\x7C", 2, "\xC3\xB8"},     {1, "\x7D", 2, "\xC3\xA5"},
     {1, "\x7E", 3, "\xE2\x80\x93"}, {1, "\x7F", 1, "\x7F"},
 };
-void Nats_danoToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "NATS_DANO", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, NATS_DANO_to_utf8,
+void Nats_danoToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "NATS_DANO", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, NATS_DANO_to_utf8,
 	                          128);
 }
 } // namespace duckdb_encodings

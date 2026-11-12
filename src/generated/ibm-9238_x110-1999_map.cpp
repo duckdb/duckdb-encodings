@@ -92,8 +92,8 @@ static const map_entry_encoding ibm_9238_X110_1999_to_utf8[] = {
     {1, "\xFC", 3, "\xEF\xBB\xA7"}, {1, "\xFD", 3, "\xEF\xBB\xAC"}, {1, "\xFE", 3, "\xEF\xBB\xA9"},
     {1, "\xFF", 3, "\xE2\x82\xAC"},
 };
-void Ibm_9238_x110_1999ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ibm-9238_X110-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Ibm_9238_x110_1999ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ibm-9238_X110-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          ibm_9238_X110_1999_to_utf8, 256);
 }
 } // namespace duckdb_encodings

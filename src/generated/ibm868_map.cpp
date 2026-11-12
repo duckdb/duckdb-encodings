@@ -83,8 +83,8 @@ static const map_entry_encoding IBM868_to_utf8[] = {
     {1, "\xF1", 2, "\xD8\xA1"},     {1, "\xF2", 2, "\xC2\xAD"},     {1, "\xFB", 2, "\xD9\x91"},
     {1, "\xFC", 3, "\xEF\xB9\xBD"}, {1, "\xFE", 3, "\xE2\x96\xA0"}, {1, "\xFF", 2, "\xC2\xA0"},
 };
-void Ibm868ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM868", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM868_to_utf8, 231);
+void Ibm868ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM868", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM868_to_utf8, 231);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb
