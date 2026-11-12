@@ -20213,8 +20213,8 @@ static const map_entry_encoding big5_to_utf8[] = {
 // Aliases of "big5": the names Python accepts for its codec "big5"
 static const char *const big5_aliases[] = {"big5-tw", "big5_tw", "csbig5", "x-mac-trad-chinese", "x_mac_trad_chinese"};
 
-void Big5ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "big5", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, big5_to_utf8, 20203,
+void Big5ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "big5", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, big5_to_utf8, 20203,
 	                          big5_aliases, 5);
 }
 } // namespace duckdb_encodings

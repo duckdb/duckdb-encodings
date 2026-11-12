@@ -38,8 +38,8 @@ static const map_entry_encoding java_ASCII_1_3_P_to_utf8[] = {
     {1, "\x78", 1, "\x78"}, {1, "\x79", 1, "\x79"}, {1, "\x7A", 1, "\x7A"}, {1, "\x7B", 1, "\x7B"},
     {1, "\x7C", 1, "\x7C"}, {1, "\x7D", 1, "\x7D"}, {1, "\x7E", 1, "\x7E"}, {1, "\x7F", 1, "\x7F"},
 };
-void Java_ascii_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-ASCII-1.3_P", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1,
+void Java_ascii_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-ASCII-1.3_P", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1,
 	                          java_ASCII_1_3_P_to_utf8, 128);
 }
 } // namespace duckdb_encodings

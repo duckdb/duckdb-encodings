@@ -7076,8 +7076,8 @@ static const map_entry_encoding java_SJIS_1_3_P_to_utf8[] = {
     {2, "\xEA\xA3", 3, "\xE5\x87\x9C"},
     {2, "\xEA\xA4", 3, "\xE7\x86\x99"},
 };
-void Java_sjis_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-SJIS-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Java_sjis_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-SJIS-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          java_SJIS_1_3_P_to_utf8, 7070);
 }
 } // namespace duckdb_encodings

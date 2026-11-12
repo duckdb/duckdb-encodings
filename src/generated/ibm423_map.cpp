@@ -68,8 +68,8 @@ static const map_entry_encoding IBM423_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},     {1, "\xFA", 2, "\xC3\xBF"}, {1, "\xFB", 2, "\xC3\xA7"},
     {1, "\xFC", 2, "\xC3\x87"}, {1, "\xFF", 2, "\xC2\x9F"},
 };
-void Ibm423ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM423", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, IBM423_to_utf8, 246);
+void Ibm423ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM423", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, IBM423_to_utf8, 246);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

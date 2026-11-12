@@ -98,8 +98,8 @@ static const char *const iso_8859_16_2001_aliases[] = {
     "iso-8859-16", "iso-8859-16-2001", "iso-ir-226", "iso8859-16", "iso8859_16",
     "iso_8859_16", "iso_8859_16_2001", "iso_ir_226", "l10",        "latin10"};
 
-void Iso_8859_16_2001ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "iso-8859_16-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Iso_8859_16_2001ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "iso-8859_16-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          iso_8859_16_2001_to_utf8, 256, iso_8859_16_2001_aliases, 10);
 }
 } // namespace duckdb_encodings

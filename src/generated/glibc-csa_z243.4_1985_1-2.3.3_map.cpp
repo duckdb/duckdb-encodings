@@ -38,8 +38,8 @@ static const map_entry_encoding glibc_CSA_Z243_4_1985_1_2_3_3_to_utf8[] = {
     {1, "\x78", 1, "\x78"},     {1, "\x79", 1, "\x79"},     {1, "\x7A", 1, "\x7A"},     {1, "\x7B", 2, "\xC3\xA9"},
     {1, "\x7C", 2, "\xC3\xB9"}, {1, "\x7D", 2, "\xC3\xA8"}, {1, "\x7E", 2, "\xC3\xBB"}, {1, "\x7F", 1, "\x7F"},
 };
-void Glibc_csa_z243_4_1985_1_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-CSA_Z243.4_1985_1-2.3.3", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+void Glibc_csa_z243_4_1985_1_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-CSA_Z243.4_1985_1-2.3.3", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
 	                          glibc_CSA_Z243_4_1985_1_2_3_3_to_utf8, 128);
 }
 } // namespace duckdb_encodings

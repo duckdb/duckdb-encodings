@@ -92,8 +92,8 @@ static const map_entry_encoding BALTIC_to_utf8[] = {
     {1, "\xFC", 2, "\xC3\xBC"},     {1, "\xFD", 2, "\xC5\xBC"}, {1, "\xFE", 2, "\xC5\xBA"},
     {1, "\xFF", 2, "\xC4\xB8"},
 };
-void BalticToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "BALTIC", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, BALTIC_to_utf8, 256);
+void BalticToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "BALTIC", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, BALTIC_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

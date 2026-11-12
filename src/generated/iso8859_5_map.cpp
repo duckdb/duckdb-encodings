@@ -75,8 +75,9 @@ static const map_entry_encoding ISO8859_5_to_utf8[] = {
 static const char *const ISO8859_5_aliases[] = {"csisolatincyrillic", "cyrillic",  "iso-8859-5",      "iso-8859-5-1988",
                                                 "iso-ir-144",         "iso8859-5", "iso_8859_5_1988", "iso_ir_144"};
 
-void Iso8859_5ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO8859_5", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_5_to_utf8, 256,
+void Iso8859_5ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO8859_5", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_5_to_utf8,
+	                          256,
 	                          ISO8859_5_aliases, 8);
 }
 } // namespace duckdb_encodings

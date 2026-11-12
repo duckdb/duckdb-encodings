@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Macos_6_2_10_4ToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

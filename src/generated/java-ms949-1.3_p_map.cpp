@@ -17368,8 +17368,8 @@ static const map_entry_encoding java_MS949_1_3_P_to_utf8[] = {
     {2, "\xFE\xFD", 3, "\xEE\x82\xBA"},
     {2, "\xFE\xFE", 3, "\xEE\x82\xBB"},
 };
-void Java_ms949_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-MS949-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Java_ms949_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-MS949-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          java_MS949_1_3_P_to_utf8, 17362);
 }
 } // namespace duckdb_encodings

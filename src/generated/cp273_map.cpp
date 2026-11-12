@@ -74,8 +74,8 @@ static const map_entry_encoding cp273_to_utf8[] = {
 // Aliases of "cp273": the names Python accepts for its codec "cp273"
 static const char *const cp273_aliases[] = {"273", "csibm273", "ibm273"};
 
-void Cp273ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp273", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp273_to_utf8, 256,
+void Cp273ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp273", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp273_to_utf8, 256,
 	                          cp273_aliases, 3);
 }
 } // namespace duckdb_encodings

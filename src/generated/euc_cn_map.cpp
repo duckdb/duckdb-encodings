@@ -7509,8 +7509,8 @@ static const char *const EUC_CN_aliases[] = {"chinese",     "csiso58gb231280",  
                                              "gb2312_1980", "gb2312_80",          "iso-ir-58",
                                              "iso_ir_58",   "x-mac-simp-chinese", "x_mac_simp_chinese"};
 
-void Euc_cnToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "EUC_CN", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_CN_to_utf8, 7495,
+void Euc_cnToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "EUC_CN", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_CN_to_utf8, 7495,
 	                          EUC_CN_aliases, 15);
 }
 } // namespace duckdb_encodings

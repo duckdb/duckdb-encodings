@@ -5865,8 +5865,8 @@ static const map_entry_encoding EUC_TW_to_utf8[] = {
     {2, "\xFC\xCC", 3, "\xE9\x91\xA0"},
     {2, "\xFC\xCD", 3, "\xE9\x91\xA4"},
 };
-void Euc_twToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "EUC_TW", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_TW_to_utf8, 5859);
+void Euc_twToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "EUC_TW", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_TW_to_utf8, 5859);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

@@ -3885,8 +3885,8 @@ static const map_entry_encoding ibm_300_P120_2006_to_utf8[] = {
     {2, "\x7F\xFB", 3, "\xEF\x84\x8E"}, {2, "\x7F\xFC", 3, "\xEF\x84\x8F"}, {2, "\x7F\xFD", 3, "\xEF\x84\x90"},
     {2, "\x7F\xFE", 3, "\xEF\x84\x91"},
 };
-void Ibm_300_p120_2006ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ibm-300_P120-2006", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Ibm_300_p120_2006ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ibm-300_P120-2006", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          ibm_300_P120_2006_to_utf8, 11635);
 }
 } // namespace duckdb_encodings

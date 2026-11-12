@@ -38,8 +38,8 @@ static const map_entry_encoding LATIN_GREEK_1_to_utf8[] = {
     {1, "\x78", 1, "\x78"},     {1, "\x79", 1, "\x79"},     {1, "\x7A", 1, "\x7A"},         {1, "\x7B", 1, "\x7B"},
     {1, "\x7C", 1, "\x7C"},     {1, "\x7D", 1, "\x7D"},     {1, "\x7E", 3, "\xE2\x80\xBE"}, {1, "\x7F", 1, "\x7F"},
 };
-void Latin_greek_1ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "LATIN_GREEK_1", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Latin_greek_1ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "LATIN_GREEK_1", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          LATIN_GREEK_1_to_utf8, 128);
 }
 } // namespace duckdb_encodings

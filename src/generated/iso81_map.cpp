@@ -70,8 +70,8 @@ static const map_entry_encoding iso81_to_utf8[] = {
     {1, "\xF8", 2, "\xC3\xB8"}, {1, "\xF9", 2, "\xC3\xB9"}, {1, "\xFA", 2, "\xC3\xBA"}, {1, "\xFB", 2, "\xC3\xBB"},
     {1, "\xFC", 2, "\xC3\xBC"}, {1, "\xFD", 2, "\xC3\xBD"}, {1, "\xFE", 2, "\xC3\xBE"}, {1, "\xFF", 2, "\xC3\xBF"},
 };
-void Iso81ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "iso81", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, iso81_to_utf8, 256);
+void Iso81ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "iso81", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, iso81_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

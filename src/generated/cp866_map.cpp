@@ -96,8 +96,8 @@ static const map_entry_encoding cp866_to_utf8[] = {
 // Aliases of "cp866": the names Python accepts for its codec "cp866"
 static const char *const cp866_aliases[] = {"866", "csibm866", "ibm866"};
 
-void Cp866ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp866", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp866_to_utf8, 256,
+void Cp866ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp866", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp866_to_utf8, 256,
 	                          cp866_aliases, 3);
 }
 } // namespace duckdb_encodings

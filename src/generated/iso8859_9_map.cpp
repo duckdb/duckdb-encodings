@@ -76,8 +76,9 @@ static const char *const ISO8859_9_aliases[] = {"csisolatin5", "iso-8859-9", "is
                                                 "iso-ir-148",  "iso8859-9",  "iso_8859_9_1989",
                                                 "iso_ir_148",  "l5",         "latin5"};
 
-void Iso8859_9ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO8859_9", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO8859_9_to_utf8, 256,
+void Iso8859_9ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO8859_9", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO8859_9_to_utf8,
+	                          256,
 	                          ISO8859_9_aliases, 9);
 }
 } // namespace duckdb_encodings

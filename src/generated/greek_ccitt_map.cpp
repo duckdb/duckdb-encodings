@@ -37,8 +37,9 @@ static const map_entry_encoding GREEK_CCITT_to_utf8[] = {
     {1, "\x77", 2, "\xCF\x87"}, {1, "\x78", 2, "\xCF\x88"}, {1, "\x79", 2, "\xCF\x89"}, {1, "\x7B", 1, "\x7B"},
     {1, "\x7C", 1, "\x7C"},     {1, "\x7D", 1, "\x7D"},     {1, "\x7E", 2, "\xC2\xAF"}, {1, "\x7F", 1, "\x7F"},
 };
-void Greek_ccittToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "GREEK_CCITT", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, GREEK_CCITT_to_utf8,
+void Greek_ccittToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "GREEK_CCITT", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+	                          GREEK_CCITT_to_utf8,
 	                          124);
 }
 } // namespace duckdb_encodings

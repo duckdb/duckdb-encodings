@@ -38,8 +38,8 @@ static const map_entry_encoding GREEK7_to_utf8[] = {
     {1, "\x7B", 1, "\x7B"},     {1, "\x7C", 1, "\x7C"},     {1, "\x7D", 1, "\x7D"},     {1, "\x7E", 3, "\xE2\x80\xBE"},
     {1, "\x7F", 1, "\x7F"},
 };
-void Greek7ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "GREEK7", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, GREEK7_to_utf8, 125);
+void Greek7ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "GREEK7", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, GREEK7_to_utf8, 125);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

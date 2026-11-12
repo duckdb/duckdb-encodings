@@ -95,8 +95,9 @@ static const map_entry_encoding HP_ROMAN8_to_utf8[] = {
 // Aliases of "HP_ROMAN8": the names Python accepts for its codec "hp_roman8"
 static const char *const HP_ROMAN8_aliases[] = {"cp1051", "cshproman8", "hp-roman8", "ibm1051", "r8", "roman8"};
 
-void Hp_roman8ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "HP_ROMAN8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, HP_ROMAN8_to_utf8, 255,
+void Hp_roman8ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "HP_ROMAN8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, HP_ROMAN8_to_utf8,
+	                          255,
 	                          HP_ROMAN8_aliases, 6);
 }
 } // namespace duckdb_encodings

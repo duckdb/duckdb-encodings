@@ -3125,8 +3125,8 @@ static const map_entry_encoding ibm_928_P100_1995_to_utf8[] = {
     {2, "\xFA\x77", 3, "\xE2\x80\xA5"}, {2, "\xFA\x78", 3, "\xE3\x82\x9D"}, {2, "\xFA\x79", 3, "\xE3\x82\x9E"},
     {2, "\xFA\x7A", 3, "\xE2\x96\xBD"}, {2, "\xFA\x7B", 3, "\xE2\x96\xBC"},
 };
-void Ibm_928_p100_1995ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ibm-928_P100-1995", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Ibm_928_p100_1995ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ibm-928_P100-1995", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          ibm_928_P100_1995_to_utf8, 9356);
 }
 } // namespace duckdb_encodings
