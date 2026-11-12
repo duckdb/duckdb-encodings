@@ -151,27 +151,19 @@ static void Decode(cxx::EncodingFunction::DecodeInput &input) {
 	input.SetResult(pos, written);
 }
 
-static std::string LowerCase(const char *name, size_t name_length) {
-	std::string result(name, name_length);
-	std::transform(result.begin(), result.end(), result.begin(),
-	               [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-	return result;
-}
-
-static std::mutex &MapSizeLock() {
+static std::mutex &RegisteredLock() {
 	static std::mutex lock;
 	return lock;
 }
 
-static std::unordered_map<std::string, size_t> &MapSizes() {
-	static std::unordered_map<std::string, size_t> map_sizes;
-	return map_sizes;
+static std::vector<RegisteredEncoding> &Registered() {
+	static std::vector<RegisteredEncoding> registered;
+	return registered;
 }
 
-size_t GetEncodingMapSize(const char *name, size_t name_length) {
-	std::lock_guard<std::mutex> guard(MapSizeLock());
-	auto entry = MapSizes().find(LowerCase(name, name_length));
-	return entry == MapSizes().end() ? 0 : entry->second;
+std::vector<RegisteredEncoding> GetRegisteredEncodings() {
+	std::lock_guard<std::mutex> guard(RegisteredLock());
+	return Registered();
 }
 
 static void RegisterName(EncodingRegistrar &registrar, const std::string &name, size_t max_bytes_per_byte,
@@ -181,8 +173,8 @@ static void RegisterName(EncodingRegistrar &registrar, const std::string &name, 
 	function.SetDecodeCallback(Decode);
 	function.SetUserData<EncodingTablePtr>(table);
 	registrar.extension.Register(function);
-	std::lock_guard<std::mutex> guard(MapSizeLock());
-	MapSizes()[LowerCase(name.data(), name.size())] = table->map_size;
+	std::lock_guard<std::mutex> guard(RegisteredLock());
+	Registered().push_back({name, lookup_bytes, max_bytes_per_byte, table->map_size});
 }
 
 void RegisterGeneratedEncoding(EncodingRegistrar &registrar, const char *name, size_t max_bytes_per_byte,

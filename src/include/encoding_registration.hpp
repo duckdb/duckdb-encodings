@@ -10,6 +10,8 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
+#include <vector>
 
 // Included by the generated conversion tables. Don't include any DuckDB headers here, so that compiler caches can reuse
 // the tables across changes to DuckDB's headers.
@@ -33,9 +35,16 @@ void RegisterGeneratedEncoding(EncodingRegistrar &registrar, const char *name, s
                                size_t lookup_bytes, const map_entry_encoding *map, size_t map_size,
                                const char *const *aliases = nullptr, size_t alias_count = 0);
 
-//! The number of byte sequences in the conversion table of a registered encoding, 0 if it has none (the encodings
-//! DuckDB provides itself).
-size_t GetEncodingMapSize(const char *name, size_t name_length);
+//! An encoding registered by this extension.
+struct RegisteredEncoding {
+	std::string name;
+	size_t max_input_bytes;
+	size_t max_output_bytes;
+	size_t map_size;
+};
+
+//! The encodings registered so far.
+std::vector<RegisteredEncoding> GetRegisteredEncodings();
 
 } // namespace duckdb_encodings
 } // namespace duckdb

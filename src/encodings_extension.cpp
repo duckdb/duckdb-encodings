@@ -16,7 +16,7 @@ namespace duckdb_encodings {
 // duckdb_encodings(): lists every encoding name read_csv accepts
 //===--------------------------------------------------------------------===//
 struct EncodingsBindData {
-	std::vector<cxx::EncodingInformation> entries;
+	std::vector<RegisteredEncoding> entries;
 };
 
 struct EncodingsGlobalState {
@@ -36,9 +36,13 @@ static void DuckDBEncodingsBind(cxx::TableFunction::BindInput &input) {
 	input.AddResultColumn("map_size", factory.ParseType("BIGINT"));
 
 	EncodingsBindData bind_data;
-	bind_data.entries = input.GetContext().ListEncodings();
+	bind_data.entries = GetRegisteredEncodings();
+	// The encodings DuckDB provides itself, which have no conversion table
+	bind_data.entries.push_back({"utf-8", 1, 1, 0});
+	bind_data.entries.push_back({"latin-1", 1, 2, 0});
+	bind_data.entries.push_back({"utf-16", 4, 3, 0});
 	std::sort(bind_data.entries.begin(), bind_data.entries.end(),
-	          [](const cxx::EncodingInformation &a, const cxx::EncodingInformation &b) { return a.name < b.name; });
+	          [](const RegisteredEncoding &a, const RegisteredEncoding &b) { return a.name < b.name; });
 	input.SetBindData<EncodingsBindData>(std::move(bind_data));
 }
 
@@ -62,7 +66,7 @@ static void DuckDBEncodingsExec(cxx::TableFunction::ExecInput &input) {
 		name.AssignString(count, entry.name);
 		max_input_bytes[count] = static_cast<int64_t>(entry.max_input_bytes);
 		max_output_bytes[count] = static_cast<int64_t>(entry.max_output_bytes);
-		map_size[count] = static_cast<int64_t>(GetEncodingMapSize(entry.name.data(), entry.name.size()));
+		map_size[count] = static_cast<int64_t>(entry.map_size);
 		count++;
 	}
 	name.SetSize(count);
