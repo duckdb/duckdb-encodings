@@ -18,7 +18,7 @@ test	data
 endloop
 
 # Python canonical codec names (codecs.lookup(name).name) and common aliases
-foreach enc cp1252 iso8859-4 iso8859_4 latin1 l4 koi8-r mac-roman macintosh sjis euc_kr euckr cp936 ms932 tis620 us-ascii
+foreach enc cp1252 iso8859-4 iso8859_4 latin1 l4 koi8-r mac-roman macintosh sjis euc_kr euckr cp936 ms932 tis620 us-ascii cp720 cp858 ibm858 cp1125 cp866u ruscii koi8-t koi8_t ptcp154 pt154 cp154 kz1048 rk1048 mac-greek mac_greek macgreek mac-iceland mac_iceland maciceland mac-latin2 mac_latin2 mac-centeuro maccentraleurope mac-turkish mac_turkish macturkish
 
 query II
 FROM read_csv('{TEST_DIR}/aliases.csv', encoding='{enc}', header=false)
@@ -49,5 +49,71 @@ true
 query I
 SELECT (SELECT list(a) FROM read_csv('data/test_windows-936-2000.csv', encoding='GBK', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
      = (SELECT list(a) FROM read_csv('data/test_windows-936-2000.csv', encoding='windows-936-2000', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_windows-720-2000.csv', encoding='cp720', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_windows-720-2000.csv', encoding='windows-720-2000', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_windows-858-2000.csv', encoding='cp858', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_windows-858-2000.csv', encoding='windows-858-2000', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_windows-1140-2000.csv', encoding='cp1140', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_windows-1140-2000.csv', encoding='windows-1140-2000', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_glibc-cp1125-2.3.3.csv', encoding='cp1125', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_glibc-cp1125-2.3.3.csv', encoding='glibc-CP1125-2.3.3', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_glibc-koi8_t-2.3.3.csv', encoding='koi8_t', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_glibc-koi8_t-2.3.3.csv', encoding='glibc-KOI8_T-2.3.3', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_glibc-pt154-2.3.3.csv', encoding='ptcp154', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_glibc-pt154-2.3.3.csv', encoding='glibc-PT154-2.3.3', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_glibc-rk1048-2.3.3.csv', encoding='kz1048', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_glibc-rk1048-2.3.3.csv', encoding='glibc-RK1048-2.3.3', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_macos-6_2-10.4.csv', encoding='mac_greek', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_macos-6_2-10.4.csv', encoding='macos-6_2-10.4', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_macos-29-10.2.csv', encoding='mac_latin2', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_macos-29-10.2.csv', encoding='macos-29-10.2', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_macos-35-10.2.csv', encoding='mac_turkish', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_macos-35-10.2.csv', encoding='macos-35-10.2', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+----
+true
+
+query I
+SELECT (SELECT list(a) FROM read_csv('data/test_macos-37_4-10.2.csv', encoding='mac_iceland', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
+     = (SELECT list(a) FROM read_csv('data/test_macos-37_4-10.2.csv', encoding='macos-37_4-10.2', header=0, quote='', auto_detect=false, columns={'a':'varchar'}, delim='', strict_mode=false))
 ----
 true
