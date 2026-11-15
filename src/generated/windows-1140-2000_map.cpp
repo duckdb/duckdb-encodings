@@ -70,9 +70,14 @@ static const map_entry_encoding windows_1140_2000_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},     {1, "\xFA", 2, "\xC2\xB3"}, {1, "\xFB", 2, "\xC3\x9B"},
     {1, "\xFC", 2, "\xC3\x9C"}, {1, "\xFD", 2, "\xC3\x99"}, {1, "\xFE", 2, "\xC3\x9A"}, {1, "\xFF", 2, "\xC2\x9F"},
 };
+
+// Aliases of "windows-1140-2000": the names Python accepts for its codec "cp1140"
+static const char *const windows_1140_2000_aliases[] = {
+    "1140", "cp01140", "cp1140", "csibm01140", "ebcdic-us-37-euro", "ebcdic_us_37_euro", "ibm01140", "ibm1140"};
+
 void Windows_1140_2000ToUtf::Register(const DBConfig &config) {
 	RegisterGeneratedEncoding(config, "windows-1140-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
-	                          windows_1140_2000_to_utf8, 256);
+	                          windows_1140_2000_to_utf8, 256, windows_1140_2000_aliases, 8);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

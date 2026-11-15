@@ -92,9 +92,13 @@ static const map_entry_encoding macos_37_4_10_2_to_utf8[] = {
     {1, "\xFC", 2, "\xC2\xB8"},     {1, "\xFD", 2, "\xCB\x9D"},     {1, "\xFE", 2, "\xCB\x9B"},
     {1, "\xFF", 2, "\xCB\x87"},
 };
+
+// Aliases of "macos-37_4-10.2": the names Python accepts for its codec "mac_iceland"
+static const char *const macos_37_4_10_2_aliases[] = {"mac-iceland", "mac_iceland", "maciceland"};
+
 void Macos_37_4_10_2ToUtf::Register(const DBConfig &config) {
 	RegisterGeneratedEncoding(config, "macos-37_4-10.2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
-	                          macos_37_4_10_2_to_utf8, 256);
+	                          macos_37_4_10_2_to_utf8, 256, macos_37_4_10_2_aliases, 3);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb
