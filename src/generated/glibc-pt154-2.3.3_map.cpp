@@ -92,9 +92,14 @@ static const map_entry_encoding glibc_PT154_2_3_3_to_utf8[] = {
     {1, "\xFC", 2, "\xD1\x8C"},     {1, "\xFD", 2, "\xD1\x8D"},     {1, "\xFE", 2, "\xD1\x8E"},
     {1, "\xFF", 2, "\xD1\x8F"},
 };
+
+// Aliases of "glibc-PT154-2.3.3": the names Python accepts for its codec "ptcp154"
+static const char *const glibc_PT154_2_3_3_aliases[] = {"cp154",          "csptcp154", "cyrillic-asian",
+                                                        "cyrillic_asian", "pt154",     "ptcp154"};
+
 void Glibc_pt154_2_3_3ToUtf::Register(const DBConfig &config) {
 	RegisterGeneratedEncoding(config, "glibc-PT154-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
-	                          glibc_PT154_2_3_3_to_utf8, 256);
+	                          glibc_PT154_2_3_3_to_utf8, 256, glibc_PT154_2_3_3_aliases, 6);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb
