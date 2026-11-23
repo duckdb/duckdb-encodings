@@ -92,9 +92,13 @@ static const map_entry_encoding glibc_CP1125_2_3_3_to_utf8[] = {
     {1, "\xFC", 3, "\xE2\x84\x96"}, {1, "\xFD", 2, "\xC2\xA4"},     {1, "\xFE", 3, "\xE2\x96\xA0"},
     {1, "\xFF", 2, "\xC2\xA0"},
 };
+
+// Aliases of "glibc-CP1125-2.3.3": the names Python accepts for its codec "cp1125"
+static const char *const glibc_CP1125_2_3_3_aliases[] = {"1125", "cp1125", "cp866u", "ibm1125", "ruscii"};
+
 void Glibc_cp1125_2_3_3ToUtf::Register(const DBConfig &config) {
 	RegisterGeneratedEncoding(config, "glibc-CP1125-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
-	                          glibc_CP1125_2_3_3_to_utf8, 256);
+	                          glibc_CP1125_2_3_3_to_utf8, 256, glibc_CP1125_2_3_3_aliases, 5);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

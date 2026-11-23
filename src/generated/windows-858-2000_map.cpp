@@ -92,9 +92,21 @@ static const map_entry_encoding windows_858_2000_to_utf8[] = {
     {1, "\xFC", 2, "\xC2\xB3"},     {1, "\xFD", 2, "\xC2\xB2"},     {1, "\xFE", 3, "\xE2\x96\xA0"},
     {1, "\xFF", 2, "\xC2\xA0"},
 };
+
+// Aliases of "windows-858-2000": the names Python accepts for its codec "cp858"
+static const char *const windows_858_2000_aliases[] = {"858",
+                                                       "cp00858",
+                                                       "cp858",
+                                                       "csibm00858",
+                                                       "csibm858",
+                                                       "ibm00858",
+                                                       "ibm858",
+                                                       "pc-multilingual-850-euro",
+                                                       "pc_multilingual_850_euro"};
+
 void Windows_858_2000ToUtf::Register(const DBConfig &config) {
 	RegisterGeneratedEncoding(config, "windows-858-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
-	                          windows_858_2000_to_utf8, 256);
+	                          windows_858_2000_to_utf8, 256, windows_858_2000_aliases, 9);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb
