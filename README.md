@@ -28,18 +28,13 @@ SELECT name FROM duckdb_encodings() WHERE name LIKE '%1252%';
 
 ## Building
 ### Generating Encoding Maps
-Most of the code in this library consists of auto-generated maps from the Unicode data. The Unicode data is inlined in the `third_party` folder, and the generated code resides in `src/include/generated` and `src/generated` . Any changes to files in these folders should be made by modifying the `scripts/converter.py` script, rather than editing the files manually.
-If it's necessary to regenerate the code (e.g., due to a bug fix in the replacement maps), simply run:
+The conversion tables of all encodings are generated from the Unicode data, which is inlined in the `third_party` folder. They are stored in a single dataset, `src/encodings_dataset.cpp`, which holds all tables (similar tables are stored once, and all of them are compressed together with ZSTD) and the names they are registered under; `src/encodings_dataset.manifest` lists its contents in a readable form. The extension unpacks a table the first time one of its encodings is used. Any changes to these files should be made by modifying the `scripts/converter.py` script, rather than editing the files manually.
+If it's necessary to regenerate the dataset (e.g., due to a bug fix in the replacement maps), simply run the following, which needs the `zstandard` Python package or the `zstd` command line tool:
 ```bash
 python scripts/converter.py
 ```
 
-Note that the script does not generate formatted code, so you must also run:
-```bash
-make format
-```
-
-It is also important to notice that the `scripts/converter.py` script also generates the `test/sql/encodings.test` test file.
+It is also important to notice that the `scripts/converter.py` script also generates the `test/sql/encodings.test` test file and the CSV files it reads in `data`.
 
 ### Build steps
 Now to build the extension, run:

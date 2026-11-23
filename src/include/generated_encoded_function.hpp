@@ -15,6 +15,9 @@
 namespace duckdb {
 namespace duckdb_encodings {
 
+//! Registers all encodings of the dataset under all of their names
+void RegisterEncodings(const DBConfig &config);
+
 class GeneratedEncodedFunction {
 public:
 	static void Decode(CSVEncoderBuffer &encoded_buffer, char *target_buffer, idx_t &target_buffer_current_position,
