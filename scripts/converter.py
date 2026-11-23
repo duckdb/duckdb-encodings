@@ -49,7 +49,7 @@ extra_aliases = {
 	# IANA name of Microsoft's CP932 (issue #19); Python only knows it as cp932/ms932
 	'windows-932-2000': ['windows-31j', 'windows_31j'],
 	'ibm-943_P15A-2003': ['ibm-943', 'ibm_943', 'cp943'],
-	# Python's encodings.aliases only lists these from 3.13 on; keep the output independent of the Python version
+	# Not every Python version lists these in encodings.aliases; keep the output independent of the Python version
 	'windows-874-2000': ['874', 'ms874', 'windows-874', 'windows_874'],
 	'ISO8859_8': ['iso-8859-8-e', 'iso-8859-8-i', 'iso_8859_8_e', 'iso_8859_8_i'],
 	'EUC_KR': ['cseuckr'],
