@@ -7,7 +7,6 @@
 #include "duckdb/main/extension/extension_loader.hpp"
 
 #include "generated_encoded_function.hpp"
-#include "generated/registration.hpp"
 
 #include <algorithm>
 
@@ -85,7 +84,7 @@ static void DuckDBEncodingsFunction(ClientContext &context, TableFunctionInput &
 
 static void LoadInternal(ExtensionLoader &loader) {
 	auto &config = loader.GetDatabaseInstance().config;
-	duckdb_encodings::RegistrationEncodedFunctions::RegisterFunctions(config);
+	duckdb_encodings::RegisterEncodings(config);
 
 	loader.RegisterFunction(
 	    TableFunction("duckdb_encodings", {}, DuckDBEncodingsFunction, DuckDBEncodingsBind, DuckDBEncodingsInit));
