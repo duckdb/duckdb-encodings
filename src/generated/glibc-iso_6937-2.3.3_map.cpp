@@ -139,8 +139,8 @@ static const map_entry_encoding glibc_ISO_6937_2_3_3_to_utf8[] = {
     {1, "\xFB", 2, "\xC3\x9F"},     {1, "\xFC", 2, "\xC3\xBE"},     {1, "\xFD", 2, "\xC5\xA7"},
     {1, "\xFE", 2, "\xC5\x8B"},     {1, "\xFF", 2, "\xC2\xAD"},
 };
-void Glibc_iso_6937_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-ISO_6937-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Glibc_iso_6937_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-ISO_6937-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          glibc_ISO_6937_2_3_3_to_utf8, 398);
 }
 } // namespace duckdb_encodings

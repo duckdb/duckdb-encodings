@@ -17405,8 +17405,8 @@ static const map_entry_encoding windows_1361_2000_to_utf8[] = {
 // Aliases of "windows-1361-2000": the names Python accepts for its codec "johab"
 static const char *const windows_1361_2000_aliases[] = {"cp1361", "johab", "ms1361"};
 
-void Windows_1361_2000ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "windows-1361-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Windows_1361_2000ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "windows-1361-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          windows_1361_2000_to_utf8, 17395, windows_1361_2000_aliases, 3);
 }
 } // namespace duckdb_encodings

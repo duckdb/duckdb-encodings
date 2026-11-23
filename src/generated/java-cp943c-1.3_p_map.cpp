@@ -9403,8 +9403,8 @@ static const map_entry_encoding java_Cp943C_1_3_P_to_utf8[] = {
     {2, "\xFC\x4A", 3, "\xE9\xB8\x99"},
     {2, "\xFC\x4B", 3, "\xE9\xBB\x91"},
 };
-void Java_cp943c_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-Cp943C-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Java_cp943c_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-Cp943C-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          java_Cp943C_1_3_P_to_utf8, 9397);
 }
 } // namespace duckdb_encodings

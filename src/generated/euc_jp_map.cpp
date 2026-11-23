@@ -13147,8 +13147,8 @@ static const map_entry_encoding EUC_JP_to_utf8[] = {
 // Aliases of "EUC_JP": the names Python accepts for its codec "euc_jp"
 static const char *const EUC_JP_aliases[] = {"euc-jp", "eucjp", "u-jis", "u_jis", "ujis"};
 
-void Euc_jpToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "EUC_JP", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3, EUC_JP_to_utf8, 13137,
+void Euc_jpToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "EUC_JP", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3, EUC_JP_to_utf8, 13137,
 	                          EUC_JP_aliases, 5);
 }
 } // namespace duckdb_encodings

@@ -96,8 +96,8 @@ static const map_entry_encoding cp437_to_utf8[] = {
 // Aliases of "cp437": the names Python accepts for its codec "cp437"
 static const char *const cp437_aliases[] = {"437", "cspc8codepage437", "ibm437"};
 
-void Cp437ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp437", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp437_to_utf8, 256,
+void Cp437ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp437", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp437_to_utf8, 256,
 	                          cp437_aliases, 3);
 }
 } // namespace duckdb_encodings

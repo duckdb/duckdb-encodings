@@ -96,8 +96,8 @@ static const map_entry_encoding KOI8_U_to_utf8[] = {
 // Aliases of "KOI8_U": the names Python accepts for its codec "koi8_u"
 static const char *const KOI8_U_aliases[] = {"koi8-u"};
 
-void Koi8_uToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "KOI8_U", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, KOI8_U_to_utf8, 256,
+void Koi8_uToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "KOI8_U", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, KOI8_U_to_utf8, 256,
 	                          KOI8_U_aliases, 1);
 }
 } // namespace duckdb_encodings

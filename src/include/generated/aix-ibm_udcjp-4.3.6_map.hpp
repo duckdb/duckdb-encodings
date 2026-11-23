@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Aix_ibm_udcjp_4_3_6ToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

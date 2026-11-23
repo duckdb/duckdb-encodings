@@ -46,8 +46,8 @@ static const map_entry_encoding IBM274_to_utf8[] = {
     {1, "\xF3", 1, "\x33"},     {1, "\xF4", 1, "\x34"},     {1, "\xF5", 1, "\x35"},     {1, "\xF6", 1, "\x36"},
     {1, "\xF7", 1, "\x37"},     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},     {1, "\xFF", 2, "\xC2\x9F"},
 };
-void Ibm274ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM274", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, IBM274_to_utf8, 160);
+void Ibm274ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM274", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, IBM274_to_utf8, 160);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

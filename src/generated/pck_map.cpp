@@ -9402,8 +9402,8 @@ static const map_entry_encoding PCK_to_utf8[] = {
     {2, "\xFC\x4A", 3, "\xE9\xB8\x99"},
     {2, "\xFC\x4B", 3, "\xE9\xBB\x91"},
 };
-void PckToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "PCK", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, PCK_to_utf8, 9396);
+void PckToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "PCK", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, PCK_to_utf8, 9396);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

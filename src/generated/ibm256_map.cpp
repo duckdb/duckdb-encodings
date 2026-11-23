@@ -92,8 +92,8 @@ static const map_entry_encoding IBM256_to_utf8[] = {
     {1, "\xFC", 2, "\xC3\x9C"},     {1, "\xFD", 2, "\xC3\x99"}, {1, "\xFE", 2, "\xC3\x9A"},
     {1, "\xFF", 2, "\xC2\x9F"},
 };
-void Ibm256ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM256", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM256_to_utf8, 256);
+void Ibm256ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM256", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM256_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

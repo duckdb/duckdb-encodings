@@ -20432,8 +20432,8 @@ static const map_entry_encoding ibm_964_P110_1999_to_utf8[] = {
 // Aliases of "ibm-964_P110-1999": commonly used names
 static const char *const ibm_964_P110_1999_aliases[] = {"euc-tw", "euctw"};
 
-void Ibm_964_p110_1999ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ibm-964_P110-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4,
+void Ibm_964_p110_1999ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ibm-964_P110-1999", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4,
 	                          ibm_964_P110_1999_to_utf8, 20422, ibm_964_P110_1999_aliases, 2);
 }
 } // namespace duckdb_encodings

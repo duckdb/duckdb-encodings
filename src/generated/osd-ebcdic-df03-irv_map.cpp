@@ -63,8 +63,8 @@ static const map_entry_encoding osd_EBCDIC_DF03_IRV_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},     {1, "\xFB", 1, "\x7B"},         {1, "\xFD", 1, "\x7D"},
     {1, "\xFF", 1, "\x7E"},
 };
-void Osd_ebcdic_df03_irvToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "osd-EBCDIC-DF03-IRV", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Osd_ebcdic_df03_irvToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "osd-EBCDIC-DF03-IRV", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          osd_EBCDIC_DF03_IRV_to_utf8, 225);
 }
 } // namespace duckdb_encodings

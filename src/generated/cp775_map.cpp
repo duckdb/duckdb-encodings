@@ -96,8 +96,8 @@ static const map_entry_encoding CP775_to_utf8[] = {
 // Aliases of "CP775": the names Python accepts for its codec "cp775"
 static const char *const CP775_aliases[] = {"775", "cspc775baltic", "ibm775"};
 
-void Cp775ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "CP775", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP775_to_utf8, 256,
+void Cp775ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "CP775", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, CP775_to_utf8, 256,
 	                          CP775_aliases, 3);
 }
 } // namespace duckdb_encodings

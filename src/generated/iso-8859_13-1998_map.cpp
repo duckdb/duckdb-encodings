@@ -96,8 +96,8 @@ static const map_entry_encoding iso_8859_13_1998_to_utf8[] = {
 // Aliases of "iso-8859_13-1998": the names Python accepts for its codec "iso8859_13"
 static const char *const iso_8859_13_1998_aliases[] = {"iso-8859-13", "iso8859-13", "iso8859_13", "l7", "latin7"};
 
-void Iso_8859_13_1998ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "iso-8859_13-1998", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Iso_8859_13_1998ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "iso-8859_13-1998", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          iso_8859_13_1998_to_utf8, 256, iso_8859_13_1998_aliases, 5);
 }
 } // namespace duckdb_encodings

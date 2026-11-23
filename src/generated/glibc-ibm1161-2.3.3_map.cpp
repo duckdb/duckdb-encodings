@@ -80,8 +80,8 @@ static const map_entry_encoding glibc_IBM1161_2_3_3_to_utf8[] = {
     {1, "\xFC", 2, "\xC2\xA2"},     {1, "\xFD", 2, "\xC2\xAC"},     {1, "\xFE", 2, "\xC2\xA6"},
     {1, "\xFF", 2, "\xC2\xA0"},
 };
-void Glibc_ibm1161_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-IBM1161-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Glibc_ibm1161_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-IBM1161-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          glibc_IBM1161_2_3_3_to_utf8, 220);
 }
 } // namespace duckdb_encodings

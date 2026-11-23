@@ -2299,8 +2299,8 @@ static const map_entry_encoding JISX0208_1983_GR_to_utf8[] = {
     {2, "\xF4\xA1", 3, "\xE5\xA0\xAF"}, {2, "\xF4\xA2", 3, "\xE6\xA7\x87"}, {2, "\xF4\xA3", 3, "\xE9\x81\x99"},
     {2, "\xF4\xA4", 3, "\xE7\x91\xA4"},
 };
-void Jisx0208_1983_grToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "JISX0208.1983_GR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Jisx0208_1983_grToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "JISX0208.1983_GR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          JISX0208_1983_GR_to_utf8, 6877);
 }
 } // namespace duckdb_encodings

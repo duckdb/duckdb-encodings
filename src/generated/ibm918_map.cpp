@@ -83,8 +83,8 @@ static const map_entry_encoding IBM918_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},         {1, "\xF9", 1, "\x39"},         {1, "\xFD", 2, "\xD9\x91"},
     {1, "\xFE", 3, "\xEF\xB9\xBD"}, {1, "\xFF", 2, "\xC2\x9F"},
 };
-void Ibm918ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM918", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM918_to_utf8, 230);
+void Ibm918ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM918", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM918_to_utf8, 230);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

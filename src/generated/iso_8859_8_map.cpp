@@ -61,8 +61,8 @@ static const map_entry_encoding ISO_8859_8_to_utf8[] = {
     {1, "\xF5", 2, "\xD7\xA5"}, {1, "\xF6", 2, "\xD7\xA6"}, {1, "\xF7", 2, "\xD7\xA7"},     {1, "\xF8", 2, "\xD7\xA8"},
     {1, "\xF9", 2, "\xD7\xA9"}, {1, "\xFA", 2, "\xD7\xAA"},
 };
-void Iso_8859_8ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO_8859_8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO_8859_8_to_utf8,
+void Iso_8859_8ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO_8859_8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO_8859_8_to_utf8,
 	                          218);
 }
 } // namespace duckdb_encodings

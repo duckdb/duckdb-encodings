@@ -24073,8 +24073,8 @@ static const map_entry_encoding zh_CN_gbk_to_utf8[] = {
     {2, "\xFE\xFD", 3, "\xEE\x93\x84"},
     {2, "\xFE\xFE", 3, "\xEE\x93\x85"},
 };
-void Zh_cn_gbkToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "zh_CN.gbk", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, zh_CN_gbk_to_utf8,
+void Zh_cn_gbkToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "zh_CN.gbk", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, zh_CN_gbk_to_utf8,
 	                          24067);
 }
 } // namespace duckdb_encodings

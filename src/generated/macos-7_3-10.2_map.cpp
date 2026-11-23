@@ -96,8 +96,8 @@ static const map_entry_encoding macos_7_3_10_2_to_utf8[] = {
 // Aliases of "macos-7_3-10.2": the names Python accepts for its codec "mac_cyrillic"
 static const char *const macos_7_3_10_2_aliases[] = {"mac-cyrillic", "mac_cyrillic", "maccyrillic"};
 
-void Macos_7_3_10_2ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "macos-7_3-10.2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Macos_7_3_10_2ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "macos-7_3-10.2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          macos_7_3_10_2_to_utf8, 256, macos_7_3_10_2_aliases, 3);
 }
 } // namespace duckdb_encodings

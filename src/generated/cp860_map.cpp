@@ -96,8 +96,8 @@ static const map_entry_encoding cp860_to_utf8[] = {
 // Aliases of "cp860": the names Python accepts for its codec "cp860"
 static const char *const cp860_aliases[] = {"860", "csibm860", "ibm860"};
 
-void Cp860ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp860", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp860_to_utf8, 256,
+void Cp860ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp860", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp860_to_utf8, 256,
 	                          cp860_aliases, 3);
 }
 } // namespace duckdb_encodings

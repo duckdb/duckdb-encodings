@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Glibc_t_61_8bit_2_3_3ToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

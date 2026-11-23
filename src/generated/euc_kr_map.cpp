@@ -8364,8 +8364,8 @@ static const char *const EUC_KR_aliases[] = {
     "cseuckr",   "euc-kr",         "euckr",     "korean",  "ks-c-5601", "ks-c-5601-1987", "ks-x-1001",
     "ks_c_5601", "ks_c_5601_1987", "ks_x_1001", "ksc5601", "ksx1001",   "x-mac-korean",   "x_mac_korean"};
 
-void Euc_krToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "EUC_KR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_KR_to_utf8, 8352,
+void Euc_krToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "EUC_KR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, EUC_KR_to_utf8, 8352,
 	                          EUC_KR_aliases, 14);
 }
 } // namespace duckdb_encodings

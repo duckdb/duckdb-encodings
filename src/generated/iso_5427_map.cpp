@@ -38,8 +38,9 @@ static const map_entry_encoding ISO_5427_to_utf8[] = {
     {1, "\x78", 2, "\xD0\xAC"}, {1, "\x79", 2, "\xD0\xAB"}, {1, "\x7A", 2, "\xD0\x97"}, {1, "\x7B", 2, "\xD0\xA8"},
     {1, "\x7C", 2, "\xD0\xAD"}, {1, "\x7D", 2, "\xD0\xA9"}, {1, "\x7E", 2, "\xD0\xA7"}, {1, "\x7F", 1, "\x7F"},
 };
-void Iso_5427ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO_5427", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO_5427_to_utf8, 128);
+void Iso_5427ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO_5427", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO_5427_to_utf8,
+	                          128);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

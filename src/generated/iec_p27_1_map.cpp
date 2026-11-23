@@ -92,8 +92,8 @@ static const map_entry_encoding IEC_P27_1_to_utf8[] = {
     {1, "\xFC", 3, "\xE2\x86\x91"}, {1, "\xFD", 3, "\xE2\x86\x92"}, {1, "\xFE", 3, "\xE2\x86\x93"},
     {1, "\xFF", 3, "\xE2\x80\xBE"},
 };
-void Iec_p27_1ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IEC_P27_1", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IEC_P27_1_to_utf8,
+void Iec_p27_1ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IEC_P27_1", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IEC_P27_1_to_utf8,
 	                          256);
 }
 } // namespace duckdb_encodings

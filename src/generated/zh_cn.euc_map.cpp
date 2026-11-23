@@ -7541,8 +7541,8 @@ static const map_entry_encoding zh_CN_euc_to_utf8[] = {
     {2, "\xF7\xFD", 3, "\xE9\xBC\xBE"},
     {2, "\xF7\xFE", 3, "\xE9\xBD\x84"},
 };
-void Zh_cn_eucToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "zh_CN.euc", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, zh_CN_euc_to_utf8,
+void Zh_cn_eucToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "zh_CN.euc", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, zh_CN_euc_to_utf8,
 	                          7535);
 }
 } // namespace duckdb_encodings

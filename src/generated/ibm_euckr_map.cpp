@@ -8576,8 +8576,8 @@ static const map_entry_encoding IBM_eucKR_to_utf8[] = {
     {2, "\xFE\xFD", 3, "\xEE\x82\xBA"},
     {2, "\xFE\xFE", 3, "\xEE\x82\xBB"},
 };
-void Ibm_euckrToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM_eucKR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, IBM_eucKR_to_utf8,
+void Ibm_euckrToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM_eucKR", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, IBM_eucKR_to_utf8,
 	                          8570);
 }
 } // namespace duckdb_encodings

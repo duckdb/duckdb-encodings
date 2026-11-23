@@ -2299,8 +2299,8 @@ static const map_entry_encoding JISX0208_1983_0_to_utf8[] = {
     {2, "\x74\x21", 3, "\xE5\xA0\xAF"}, {2, "\x74\x22", 3, "\xE6\xA7\x87"}, {2, "\x74\x23", 3, "\xE9\x81\x99"},
     {2, "\x74\x24", 3, "\xE7\x91\xA4"},
 };
-void Jisx0208_1983_0ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "JISX0208.1983_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Jisx0208_1983_0ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "JISX0208.1983_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          JISX0208_1983_0_to_utf8, 6877);
 }
 } // namespace duckdb_encodings

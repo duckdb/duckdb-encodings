@@ -70,8 +70,8 @@ static const map_entry_encoding JISX0201_1976_0_to_utf8[] = {
     {1, "\xDB", 3, "\xEF\xBE\x9B"}, {1, "\xDC", 3, "\xEF\xBE\x9C"}, {1, "\xDD", 3, "\xEF\xBE\x9D"},
     {1, "\xDE", 3, "\xEF\xBE\x9E"}, {1, "\xDF", 3, "\xEF\xBE\x9F"},
 };
-void Jisx0201_1976_0ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "JISX0201.1976_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Jisx0201_1976_0ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "JISX0201.1976_0", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          JISX0201_1976_0_to_utf8, 191);
 }
 } // namespace duckdb_encodings

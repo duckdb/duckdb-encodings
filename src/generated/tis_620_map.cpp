@@ -84,8 +84,8 @@ static const char *const TIS_620_aliases[] = {"iso-ir-166",     "iso_ir_166",   
                                               "tis-620-2529-0", "tis-620-2529-1", "tis620",  "tis_620_0",
                                               "tis_620_2529_0", "tis_620_2529_1"};
 
-void Tis_620ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "TIS_620", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, TIS_620_to_utf8, 215,
+void Tis_620ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "TIS_620", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, TIS_620_to_utf8, 215,
 	                          TIS_620_aliases, 10);
 }
 } // namespace duckdb_encodings

@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Ibm_941_p130_2001ToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

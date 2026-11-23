@@ -1,0 +1,52 @@
+# name: test/sql/encoding_functions.test
+# description: the encodings are scalar functions in the encodings schema
+# group: [sql]
+
+require encodings
+
+# decode a complete value
+query I
+SELECT system.encodings.cp852(encode('Zażółć', 'cp852'))
+----
+Zażółć
+
+query I
+SELECT system.encodings.shift_jis('\x93\xFA\x96\x7B\x8C\xEA'::BLOB)
+----
+日本語
+
+# decode a prefix of a stream: an incomplete trailing character is not consumed
+query I
+SELECT system.encodings.shift_jis('\x93\xFA\x96'::BLOB, false)
+----
+{'decoded': 日, 'consumed': 2}
+
+query I
+SELECT system.encodings.shift_jis('\x93\xFA\x96'::BLOB, true).consumed
+----
+3
+
+# the names are case insensitive and the aliases share the table of the encoding
+query I
+SELECT system.encodings."CP852"('\x80'::BLOB) = system.encodings.ibm852('\x80'::BLOB)
+----
+true
+
+# NULL in, NULL out
+query III
+SELECT system.encodings.cp852(NULL::BLOB), system.encodings.cp852('a'::BLOB, NULL), system.encodings.cp852(NULL::VARCHAR)
+----
+NULL	NULL	NULL
+
+# many rows, including constants and NULLs
+query II
+SELECT count(*), count(system.encodings.cp852(('\x80' || i::VARCHAR::BLOB)))
+FROM (SELECT CASE WHEN i % 3 = 0 THEN NULL ELSE i END AS i FROM range(5000) t(i))
+----
+5000	3333
+
+# the encodings are listed
+query I
+SELECT count(*) FROM duckdb_encodings() WHERE name IN ('utf-8', 'latin-1', 'utf-16', 'cp852', 'shift_jis')
+----
+5

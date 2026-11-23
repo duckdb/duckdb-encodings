@@ -38,8 +38,8 @@ static const map_entry_encoding glibc_KSC5636_2_3_3_to_utf8[] = {
     {1, "\x78", 1, "\x78"},         {1, "\x79", 1, "\x79"}, {1, "\x7A", 1, "\x7A"}, {1, "\x7B", 1, "\x7B"},
     {1, "\x7C", 1, "\x7C"},         {1, "\x7D", 1, "\x7D"}, {1, "\x7E", 1, "\x7E"}, {1, "\x7F", 1, "\x7F"},
 };
-void Glibc_ksc5636_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-KSC5636-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Glibc_ksc5636_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-KSC5636-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          glibc_KSC5636_2_3_3_to_utf8, 128);
 }
 } // namespace duckdb_encodings

@@ -95,8 +95,9 @@ static const map_entry_encoding mac_roman_to_utf8[] = {
 // Aliases of "mac_roman": the names Python accepts for its codec "mac_roman"
 static const char *const mac_roman_aliases[] = {"mac-roman", "macintosh", "macroman"};
 
-void Mac_romanToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "mac_roman", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, mac_roman_to_utf8, 254,
+void Mac_romanToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "mac_roman", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, mac_roman_to_utf8,
+	                          254,
 	                          mac_roman_aliases, 3);
 }
 } // namespace duckdb_encodings

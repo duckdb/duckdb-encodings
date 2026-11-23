@@ -63,8 +63,8 @@ static const map_entry_encoding GOST_19768_74_to_utf8[] = {
     {1, "\xE9", 2, "\xD1\x89"}, {1, "\xEA", 2, "\xD1\x8A"}, {1, "\xEB", 2, "\xD1\x8B"}, {1, "\xEC", 2, "\xD1\x8C"},
     {1, "\xED", 2, "\xD1\x8D"}, {1, "\xEE", 2, "\xD1\x8E"}, {1, "\xEF", 2, "\xD1\x8F"}, {1, "\xF1", 2, "\xD1\x91"},
 };
-void Gost_19768_74ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "GOST_19768_74", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+void Gost_19768_74ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "GOST_19768_74", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
 	                          GOST_19768_74_to_utf8, 228);
 }
 } // namespace duckdb_encodings

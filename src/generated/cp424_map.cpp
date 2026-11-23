@@ -83,8 +83,8 @@ static const map_entry_encoding cp424_to_utf8[] = {
 // Aliases of "cp424": the names Python accepts for its codec "cp424"
 static const char *const cp424_aliases[] = {"424", "csibm424", "ebcdic-cp-he", "ebcdic_cp_he", "ibm424"};
 
-void Cp424ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp424", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp424_to_utf8, 217,
+void Cp424ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp424", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp424_to_utf8, 217,
 	                          cp424_aliases, 5);
 }
 } // namespace duckdb_encodings

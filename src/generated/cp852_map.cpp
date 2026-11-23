@@ -96,8 +96,8 @@ static const map_entry_encoding cp852_to_utf8[] = {
 // Aliases of "cp852": the names Python accepts for its codec "cp852"
 static const char *const cp852_aliases[] = {"852", "cspcp852", "ibm852"};
 
-void Cp852ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp852", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp852_to_utf8, 256,
+void Cp852ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp852", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, cp852_to_utf8, 256,
 	                          cp852_aliases, 3);
 }
 } // namespace duckdb_encodings

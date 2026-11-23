@@ -94,8 +94,8 @@ static const map_entry_encoding iso_8859_11_2001_to_utf8[] = {
 static const char *const iso_8859_11_2001_aliases[] = {"iso-8859-11", "iso-8859-11-2001", "iso8859-11",
                                                        "iso8859_11",  "iso_8859_11_2001", "thai"};
 
-void Iso_8859_11_2001ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "iso-8859_11-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Iso_8859_11_2001ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "iso-8859_11-2001", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          iso_8859_11_2001_to_utf8, 248, iso_8859_11_2001_aliases, 6);
 }
 } // namespace duckdb_encodings

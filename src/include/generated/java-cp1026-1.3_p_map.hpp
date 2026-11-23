@@ -20,7 +20,7 @@ namespace duckdb_encodings {
 
 class Java_cp1026_1_3_pToUtf {
 public:
-	static void Register(const DBConfig &config);
+	static void Register(EncodingRegistrar &registrar);
 };
 } // namespace duckdb_encodings
 } // namespace duckdb

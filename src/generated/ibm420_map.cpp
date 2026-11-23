@@ -88,8 +88,8 @@ static const map_entry_encoding IBM420_to_utf8[] = {
     {1, "\xF9", 1, "\x39"},         {1, "\xFB", 2, "\xD9\xA6"},     {1, "\xFC", 2, "\xD9\xA7"},
     {1, "\xFD", 2, "\xD9\xA8"},     {1, "\xFE", 2, "\xD9\xA9"},     {1, "\xFF", 2, "\xC2\x9F"},
 };
-void Ibm420ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM420", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM420_to_utf8, 246);
+void Ibm420ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM420", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM420_to_utf8, 246);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

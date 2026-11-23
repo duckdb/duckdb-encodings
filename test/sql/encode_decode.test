@@ -1,0 +1,40 @@
+# name: test/sql/encode_decode.test
+# description: encode and decode with the encodings of the extension
+# group: [sql]
+
+require encodings
+
+query I
+SELECT encode('日本語', 'shift_jis')
+----
+\x93\xFA\x96{\x8C\xEA
+
+query I
+SELECT decode('\x93\xFA\x96\x7B\x8C\xEA'::BLOB, 'shift_jis')
+----
+日本語
+
+query I
+SELECT decode(encode('mixed 日本語 text', 'shift_jis'), 'shift_jis')
+----
+mixed 日本語 text
+
+query I
+SELECT decode(encode('Zażółć gęślą jaźń', 'cp852'), 'cp852')
+----
+Zażółć gęślą jaźń
+
+query I
+SELECT decode(encode('Ā', 'gb18030'), 'gb18030')
+----
+Ā
+
+statement error
+SELECT encode('😀', 'cp852')
+----
+Could not encode the character
+
+query I
+SELECT system.encodings.cp852(encode('a', 'cp852')::VARCHAR) IS NOT NULL
+----
+true

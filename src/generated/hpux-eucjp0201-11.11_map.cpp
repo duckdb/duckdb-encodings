@@ -13143,8 +13143,8 @@ static const map_entry_encoding hpux_eucJP0201_11_11_to_utf8[] = {
     {2, "\xF4\xA5", 3, "\xE5\x87\x9C"},
     {2, "\xF4\xA6", 3, "\xE7\x86\x99"},
 };
-void Hpux_eucjp0201_11_11ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "hpux-eucJP0201-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
+void Hpux_eucjp0201_11_11ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "hpux-eucJP0201-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
 	                          hpux_eucJP0201_11_11_to_utf8, 13137);
 }
 } // namespace duckdb_encodings

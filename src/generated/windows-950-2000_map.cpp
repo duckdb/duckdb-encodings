@@ -19860,8 +19860,8 @@ static const map_entry_encoding windows_950_2000_to_utf8[] = {
 // Aliases of "windows-950-2000": the names Python accepts for its codec "cp950"
 static const char *const windows_950_2000_aliases[] = {"950", "cp950", "ms950"};
 
-void Windows_950_2000ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "windows-950-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Windows_950_2000ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "windows-950-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          windows_950_2000_to_utf8, 19850, windows_950_2000_aliases, 3);
 }
 } // namespace duckdb_encodings

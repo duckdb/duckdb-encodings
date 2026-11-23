@@ -45,8 +45,8 @@ static const map_entry_encoding INIS_CYRILLIC_to_utf8[] = {
     {1, "\x7B", 2, "\xD0\xA8"},     {1, "\x7C", 2, "\xD0\xAD"},     {1, "\x7D", 2, "\xD0\xA9"},
     {1, "\x7E", 2, "\xD0\xA7"},     {1, "\x7F", 1, "\x7F"},
 };
-void Inis_cyrillicToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "INIS_CYRILLIC", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
+void Inis_cyrillicToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "INIS_CYRILLIC", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1,
 	                          INIS_CYRILLIC_to_utf8, 116);
 }
 } // namespace duckdb_encodings

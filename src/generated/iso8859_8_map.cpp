@@ -67,8 +67,9 @@ static const char *const ISO8859_8_aliases[] = {"csisolatinhebrew", "hebrew",   
                                                 "iso-8859-8-e",     "iso-8859-8-i", "iso-ir-138",   "iso8859-8",
                                                 "iso_8859_8_1988",  "iso_8859_8_e", "iso_8859_8_i", "iso_ir_138"};
 
-void Iso8859_8ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO8859_8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_8_to_utf8, 218,
+void Iso8859_8ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO8859_8", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_8_to_utf8,
+	                          218,
 	                          ISO8859_8_aliases, 12);
 }
 } // namespace duckdb_encodings

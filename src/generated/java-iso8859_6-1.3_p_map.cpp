@@ -59,8 +59,8 @@ static const map_entry_encoding java_ISO8859_6_1_3_P_to_utf8[] = {
     {1, "\xEC", 2, "\xD9\x8C"}, {1, "\xED", 2, "\xD9\x8D"}, {1, "\xEE", 2, "\xD9\x8E"}, {1, "\xEF", 2, "\xD9\x8F"},
     {1, "\xF0", 2, "\xD9\x90"}, {1, "\xF1", 2, "\xD9\x91"}, {1, "\xF2", 2, "\xD9\x92"},
 };
-void Java_iso8859_6_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-ISO8859_6-1.3_P", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
+void Java_iso8859_6_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-ISO8859_6-1.3_P", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1,
 	                          java_ISO8859_6_1_3_P_to_utf8, 211);
 }
 } // namespace duckdb_encodings

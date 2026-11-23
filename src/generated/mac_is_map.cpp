@@ -91,8 +91,8 @@ static const map_entry_encoding MAC_IS_to_utf8[] = {
     {1, "\xFB", 2, "\xCB\x9A"},     {1, "\xFC", 2, "\xC2\xB8"},     {1, "\xFD", 2, "\xCB\x9D"},
     {1, "\xFE", 2, "\xCB\x9B"},     {1, "\xFF", 2, "\xCB\x87"},
 };
-void Mac_isToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "MAC_IS", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, MAC_IS_to_utf8, 254);
+void Mac_isToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "MAC_IS", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, MAC_IS_to_utf8, 254);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

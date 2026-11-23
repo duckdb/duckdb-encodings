@@ -5692,8 +5692,8 @@ static const map_entry_encoding cp949_to_utf8[] = {
 // Aliases of "cp949": the names Python accepts for its codec "cp949"
 static const char *const cp949_aliases[] = {"949", "ms949", "uhc"};
 
-void Cp949ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp949", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, cp949_to_utf8, 17046,
+void Cp949ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp949", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, cp949_to_utf8, 17046,
 	                          cp949_aliases, 3);
 }
 } // namespace duckdb_encodings

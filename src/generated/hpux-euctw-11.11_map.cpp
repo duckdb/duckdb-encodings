@@ -18449,8 +18449,8 @@ static const map_entry_encoding hpux_eucTW_11_11_to_utf8[] = {
     {2, "\xFD\xCB", 3, "\xE7\xB1\xB2"},
     {2, "\xFE\xFE", 3, "\xEF\xBF\xBD"},
 };
-void Hpux_euctw_11_11ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "hpux-eucTW-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4,
+void Hpux_euctw_11_11ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "hpux-eucTW-11.11", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 4,
 	                          hpux_eucTW_11_11_to_utf8, 18443);
 }
 } // namespace duckdb_encodings

@@ -96,8 +96,9 @@ static const char *const ISO8859_7_aliases[] = {
     "csisolatingreek", "ecma-118",        "ecma_118",   "elot-928",  "elot_928",        "greek",     "greek8",
     "iso-8859-7",      "iso-8859-7-1987", "iso-ir-126", "iso8859-7", "iso_8859_7_1987", "iso_ir_126"};
 
-void Iso8859_7ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO8859_7", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_7_to_utf8, 250,
+void Iso8859_7ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO8859_7", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ISO8859_7_to_utf8,
+	                          250,
 	                          ISO8859_7_aliases, 13);
 }
 } // namespace duckdb_encodings

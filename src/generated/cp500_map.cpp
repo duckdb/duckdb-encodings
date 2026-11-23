@@ -75,8 +75,8 @@ static const map_entry_encoding cp500_to_utf8[] = {
 static const char *const cp500_aliases[] = {"500",          "csibm500",     "ebcdic-cp-be", "ebcdic-cp-ch",
                                             "ebcdic_cp_be", "ebcdic_cp_ch", "ibm500"};
 
-void Cp500ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "cp500", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, cp500_to_utf8, 256,
+void Cp500ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "cp500", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, cp500_to_utf8, 256,
 	                          cp500_aliases, 7);
 }
 } // namespace duckdb_encodings

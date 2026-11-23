@@ -7579,8 +7579,8 @@ static const map_entry_encoding java_EUC_CN_1_3_P_to_utf8[] = {
     {2, "\xF7\xFD", 3, "\xE9\xBC\xBE"},
     {2, "\xF7\xFE", 3, "\xE9\xBD\x84"},
 };
-void Java_euc_cn_1_3_pToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "java-EUC_CN-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Java_euc_cn_1_3_pToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "java-EUC_CN-1.3_P", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          java_EUC_CN_1_3_P_to_utf8, 7573);
 }
 } // namespace duckdb_encodings

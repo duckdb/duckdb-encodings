@@ -65,8 +65,9 @@ static const char *const ISO8859_6_aliases[] = {"arabic",     "asmo-708",  "asmo
                                                 "ecma-114",   "ecma_114",  "iso-8859-6",      "iso-8859-6-1987",
                                                 "iso-ir-127", "iso8859-6", "iso_8859_6_1987", "iso_ir_127"};
 
-void Iso8859_6ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO8859_6", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO8859_6_to_utf8, 211,
+void Iso8859_6ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO8859_6", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, ISO8859_6_to_utf8,
+	                          211,
 	                          ISO8859_6_aliases, 12);
 }
 } // namespace duckdb_encodings

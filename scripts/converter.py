@@ -34,7 +34,7 @@ namespace duckdb {
 namespace duckdb_encodings {
 class RegistrationEncodedFunctions {
 public:
-	static void RegisterFunctions(const DBConfig &config) {
+	static void RegisterFunctions(EncodingRegistrar &registrar) {
 '''
 
 registration_class_footer = '''
@@ -266,12 +266,12 @@ with open(os.path.join(generated_path, 'registration.hpp'), "w", encoding="utf-8
 			if encoding_map_name[0].isdigit():
 				encoding_map_name = '_'+encoding_map_name
 			class_bottom = '''
-			static void Register(const DBConfig &config);
+			static void Register(EncodingRegistrar &registrar);
 			
 		};'''
 			encoding_file_path = os.path.join('third_party','icu_encodings',encoding[3])
 			bytemap = bytemaps[encoding[0]]
-			registration_file.write(f'       {encoding_class_name}ToUtf::Register(config);\n')
+			registration_file.write(f'       {encoding_class_name}ToUtf::Register(registrar);\n')
 
 			encoding_map_file_path = os.path.join(generated_path,file_name+'.hpp')
 			cpp_output = ''
@@ -315,8 +315,8 @@ namespace duckdb_encodings {{
 	'''
 					alias_arguments = f', {encoding_map_name}_aliases, {len(aliases)}'
 				class_bottom = f'''{alias_array}
-				void {encoding_class_name}ToUtf::Register(const DBConfig &config) {{
-					RegisterGeneratedEncoding(config, "{encoding[0]}", /*max_bytes_per_byte*/ {max_output}, /*lookup_bytes*/ {max_lookup},
+				void {encoding_class_name}ToUtf::Register(EncodingRegistrar &registrar) {{
+					RegisterGeneratedEncoding(registrar, "{encoding[0]}", /*max_bytes_per_byte*/ {max_output}, /*lookup_bytes*/ {max_lookup},
 					                          {encoding_map_name}_to_utf8, {map_size}{alias_arguments});
 				}}
 	}} // namespace duckdb_encodings

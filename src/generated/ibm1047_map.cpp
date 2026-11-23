@@ -70,8 +70,8 @@ static const map_entry_encoding IBM1047_to_utf8[] = {
     {1, "\xF8", 1, "\x38"},     {1, "\xF9", 1, "\x39"},     {1, "\xFA", 2, "\xC2\xB3"}, {1, "\xFB", 2, "\xC3\x9B"},
     {1, "\xFC", 2, "\xC3\x9C"}, {1, "\xFD", 2, "\xC3\x99"}, {1, "\xFE", 2, "\xC3\x9A"}, {1, "\xFF", 2, "\xC2\x9F"},
 };
-void Ibm1047ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM1047", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, IBM1047_to_utf8, 256);
+void Ibm1047ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM1047", /*max_bytes_per_byte*/ 2, /*lookup_bytes*/ 1, IBM1047_to_utf8, 256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

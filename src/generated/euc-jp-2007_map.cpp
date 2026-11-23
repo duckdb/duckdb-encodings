@@ -13654,8 +13654,9 @@ static const map_entry_encoding euc_jp_2007_to_utf8[] = {
     {2, "\xFC\xFD", 3, "\xEF\xBC\x87"},
     {2, "\xFC\xFE", 3, "\xEF\xBC\x82"},
 };
-void Euc_jp_2007ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "euc-jp-2007", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3, euc_jp_2007_to_utf8,
+void Euc_jp_2007ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "euc-jp-2007", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 3,
+	                          euc_jp_2007_to_utf8,
 	                          13648);
 }
 } // namespace duckdb_encodings

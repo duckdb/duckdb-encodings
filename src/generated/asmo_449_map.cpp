@@ -36,8 +36,9 @@ static const map_entry_encoding ASMO_449_to_utf8[] = {
     {1, "\x70", 2, "\xD9\x90"}, {1, "\x71", 2, "\xD9\x91"}, {1, "\x72", 2, "\xD9\x92"},     {1, "\x7B", 1, "\x7B"},
     {1, "\x7C", 1, "\x7C"},     {1, "\x7D", 1, "\x7D"},     {1, "\x7E", 3, "\xE2\x80\xBE"}, {1, "\x7F", 1, "\x7F"},
 };
-void Asmo_449ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ASMO_449", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ASMO_449_to_utf8, 120);
+void Asmo_449ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ASMO_449", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, ASMO_449_to_utf8,
+	                          120);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

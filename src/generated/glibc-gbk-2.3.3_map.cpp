@@ -21925,8 +21925,8 @@ static const map_entry_encoding glibc_GBK_2_3_3_to_utf8[] = {
     {2, "\xFE\x4E", 3, "\xEF\xA8\xA8"},
     {2, "\xFE\x4F", 3, "\xEF\xA8\xA9"},
 };
-void Glibc_gbk_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-GBK-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Glibc_gbk_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-GBK-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          glibc_GBK_2_3_3_to_utf8, 21919);
 }
 } // namespace duckdb_encodings

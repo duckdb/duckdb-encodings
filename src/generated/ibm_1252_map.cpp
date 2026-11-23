@@ -92,8 +92,9 @@ static const map_entry_encoding IBM_1252_to_utf8[] = {
     {1, "\xFC", 2, "\xC3\xBC"},     {1, "\xFD", 2, "\xC3\xBD"},     {1, "\xFE", 2, "\xC3\xBE"},
     {1, "\xFF", 2, "\xC3\xBF"},
 };
-void Ibm_1252ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "IBM_1252", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM_1252_to_utf8, 256);
+void Ibm_1252ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "IBM_1252", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 1, IBM_1252_to_utf8,
+	                          256);
 }
 } // namespace duckdb_encodings
 } // namespace duckdb

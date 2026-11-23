@@ -7080,8 +7080,8 @@ static const map_entry_encoding shift_jis_to_utf8[] = {
 static const char *const shift_jis_aliases[] = {"csshiftjis", "s-jis", "s_jis",          "shift-jis",
                                                 "shiftjis",   "sjis",  "x-mac-japanese", "x_mac_japanese"};
 
-void Shift_jisToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "shift_jis", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, shift_jis_to_utf8,
+void Shift_jisToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "shift_jis", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2, shift_jis_to_utf8,
 	                          7069, shift_jis_aliases, 8);
 }
 } // namespace duckdb_encodings

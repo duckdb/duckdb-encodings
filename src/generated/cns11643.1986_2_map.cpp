@@ -2556,8 +2556,8 @@ static const map_entry_encoding CNS11643_1986_2_to_utf8[] = {
     {2, "\x72\x3F", 3, "\xE7\x81\xAA"}, {2, "\x72\x40", 3, "\xE7\x88\xA9"}, {2, "\x72\x41", 3, "\xE9\xBA\xA4"},
     {2, "\x72\x42", 3, "\xE9\xBD\xBE"}, {2, "\x72\x43", 3, "\xE9\xBD\x89"}, {2, "\x72\x44", 3, "\xE9\xBE\x98"},
 };
-void Cns11643_1986_2ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "CNS11643.1986_2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Cns11643_1986_2ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "CNS11643.1986_2", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          CNS11643_1986_2_to_utf8, 7650);
 }
 } // namespace duckdb_encodings

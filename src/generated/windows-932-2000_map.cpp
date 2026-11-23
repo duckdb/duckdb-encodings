@@ -9811,8 +9811,8 @@ static const map_entry_encoding windows_932_2000_to_utf8[] = {
 static const char *const windows_932_2000_aliases[] = {"932",      "cp932",   "ms-kanji",    "ms932",
                                                        "ms_kanji", "mskanji", "windows-31j", "windows_31j"};
 
-void Windows_932_2000ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "windows-932-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Windows_932_2000ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "windows-932-2000", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          windows_932_2000_to_utf8, 9800, windows_932_2000_aliases, 8);
 }
 } // namespace duckdb_encodings

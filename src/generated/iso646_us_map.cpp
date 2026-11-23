@@ -38,8 +38,8 @@ static const map_entry_encoding ISO646_US_to_utf8[] = {
     {1, "\x78", 1, "\x78"}, {1, "\x79", 1, "\x79"}, {1, "\x7A", 1, "\x7A"}, {1, "\x7B", 1, "\x7B"},
     {1, "\x7C", 1, "\x7C"}, {1, "\x7D", 1, "\x7D"}, {1, "\x7E", 1, "\x7E"}, {1, "\x7F", 1, "\x7F"},
 };
-void Iso646_usToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "ISO646_US", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1, ISO646_US_to_utf8,
+void Iso646_usToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "ISO646_US", /*max_bytes_per_byte*/ 1, /*lookup_bytes*/ 1, ISO646_US_to_utf8,
 	                          128);
 }
 } // namespace duckdb_encodings

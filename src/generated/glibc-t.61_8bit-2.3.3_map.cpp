@@ -130,8 +130,8 @@ static const map_entry_encoding glibc_T_61_8BIT_2_3_3_to_utf8[] = {
     {1, "\xFB", 2, "\xC3\x9F"},     {1, "\xFC", 2, "\xC3\xBE"},     {1, "\xFD", 2, "\xC5\xA7"},
     {1, "\xFE", 2, "\xC5\x8B"},
 };
-void Glibc_t_61_8bit_2_3_3ToUtf::Register(const DBConfig &config) {
-	RegisterGeneratedEncoding(config, "glibc-T.61_8BIT-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
+void Glibc_t_61_8bit_2_3_3ToUtf::Register(EncodingRegistrar &registrar) {
+	RegisterGeneratedEncoding(registrar, "glibc-T.61_8BIT-2.3.3", /*max_bytes_per_byte*/ 3, /*lookup_bytes*/ 2,
 	                          glibc_T_61_8BIT_2_3_3_to_utf8, 370);
 }
 } // namespace duckdb_encodings
