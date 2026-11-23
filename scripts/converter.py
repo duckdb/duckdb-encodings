@@ -39,7 +39,18 @@ python_codec_for_icu_name = {
 	'windows-950-2000': 'cp950',
 	'windows-874-2000': 'cp874',
 	'windows-1361-2000': 'johab',
+	'windows-720-2000': 'cp720',
+	'windows-858-2000': 'cp858',
+	'windows-1140-2000': 'cp1140',
+	'glibc-CP1125-2.3.3': 'cp1125',
+	'glibc-KOI8_T-2.3.3': 'koi8_t',
+	'glibc-PT154-2.3.3': 'ptcp154',
+	'glibc-RK1048-2.3.3': 'kz1048',
+	'macos-6_2-10.4': 'mac_greek',
 	'macos-7_3-10.2': 'mac_cyrillic',
+	'macos-29-10.2': 'mac_latin2',
+	'macos-35-10.2': 'mac_turkish',
+	'macos-37_4-10.2': 'mac_iceland',
 }
 
 # Names without a Python codec that are still commonly reported for a registered table (e.g. by chardet)
@@ -53,6 +64,8 @@ extra_aliases = {
 	'windows-874-2000': ['874', 'ms874', 'windows-874', 'windows_874'],
 	'ISO8859_8': ['iso-8859-8-e', 'iso-8859-8-i', 'iso_8859_8_e', 'iso_8859_8_i'],
 	'EUC_KR': ['cseuckr'],
+	'windows-858-2000': ['cp00858', 'csibm00858', 'ibm00858', 'pc-multilingual-850-euro', 'pc_multilingual_850_euro'],
+	'windows-1140-2000': ['cp01140', 'csibm01140', 'ebcdic-us-37-euro', 'ebcdic_us_37_euro', 'ibm01140'],
 }
 
 # All codec modules shipped with Python (e.g. cp1252, iso8859_4, koi8_r, euc_kr)
