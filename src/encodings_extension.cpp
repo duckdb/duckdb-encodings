@@ -2,7 +2,6 @@
 
 #include "encoding_registrar.hpp"
 #include "encoding_registration.hpp"
-#include "generated/registration.hpp"
 
 #include <algorithm>
 #include <mutex>
@@ -77,7 +76,7 @@ static void DuckDBEncodingsExec(cxx::TableFunction::ExecInput &input) {
 
 DUCKDB_CPP_EXTENSION_ENTRYPOINT(duckdb::cxx::Extension &extension, duckdb::cxx::Context &context) {
 	duckdb::duckdb_encodings::EncodingRegistrar registrar {extension, context.GetFactory()};
-	duckdb::duckdb_encodings::RegistrationEncodedFunctions::RegisterFunctions(registrar);
+	duckdb::duckdb_encodings::RegisterEncodings(registrar);
 
 	auto function = duckdb::cxx::TableFunction::Create(context.GetFactory());
 	function.SetName("duckdb_encodings");
