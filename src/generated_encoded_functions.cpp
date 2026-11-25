@@ -1,15 +1,34 @@
-#include "generated_encoded_function.hpp"
+#include "encoding_registration.hpp"
+#include "encoding_registrar.hpp"
 #include "encodings_dataset.hpp"
 
-#include "duckdb/common/exception.hpp"
-#include "duckdb/execution/operator/csv_scanner/encode/csv_encoder.hpp"
+#include "duckdb_cpp.hpp"
 #include "zstd.h"
 
 #include <algorithm>
+#include <cctype>
+#include <cstdint>
 #include <cstring>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace duckdb {
 namespace duckdb_encodings {
+
+//! The schema of the system catalog that holds the functions of the encodings
+static const char *const SCHEMA = "encodings";
+
+//! Encoding Map Entry Struct used for byte replacement
+struct map_entry_encoding {
+	size_t key_len;
+	const char *key;
+	size_t value_len;
+	const char *value;
+};
 
 //! Index over a (sorted) conversion map: for every possible first byte, the single-byte entry that starts with it
 //! (if any) and the contiguous range of multi-byte entries that start with it. This turns the per-byte binary search
@@ -41,14 +60,44 @@ struct EncodingIndex {
 	}
 };
 
-//! A conversion table, unpacked from the dataset
-struct ConversionTable {
-	//! The entries, sorted by key; their keys and values point into `bytes`
-	vector<map_entry_encoding> entries;
-	vector<char> bytes;
-	unique_ptr<EncodingIndex> index;
+static bool KeyLess(const char *a, size_t a_len, const char *b, size_t b_len) {
+	const size_t min_len = std::min(a_len, b_len);
+	const int cmp = std::memcmp(a, b, min_len);
+	if (cmp != 0) {
+		return cmp < 0;
+	}
+	return a_len < b_len;
+}
+
+//! The inverse of a conversion map: the entries sorted by their UTF-8 value, with a range per first byte. Of several
+//! byte sequences that decode to the same value, the smallest is used.
+struct ReverseIndex {
+	std::vector<const map_entry_encoding *> entries;
+	uint32_t begin[256] = {};
+	uint32_t end[256] = {};
+	size_t max_value_len = 1;
+
+	ReverseIndex(const map_entry_encoding *map, size_t map_size) {
+		for (size_t i = 0; i < map_size; i++) {
+			entries.push_back(&map[i]);
+			max_value_len = std::max(max_value_len, map[i].value_len);
+		}
+		std::stable_sort(entries.begin(), entries.end(), [](const map_entry_encoding *a, const map_entry_encoding *b) {
+			return KeyLess(a->value, a->value_len, b->value, b->value_len);
+		});
+		for (uint32_t i = 0; i < entries.size(); i++) {
+			const auto first = static_cast<uint8_t>(entries[i]->value[0]);
+			if (end[first] == begin[first]) {
+				begin[first] = i;
+			}
+			end[first] = i + 1;
+		}
+	}
 };
 
+//===--------------------------------------------------------------------===//
+// The dataset
+//===--------------------------------------------------------------------===//
 //! What the dataset says about a table, see scripts/converter.py for the layout
 struct TableRecord {
 	uint32_t offset;
@@ -60,105 +109,61 @@ struct TableRecord {
 
 struct EncodingName {
 	uint32_t table;
-	string name;
+	std::string name;
 };
 
-//! The encodings dataset. All tables are compressed together, so a table is unpacked the first time one of its names is
-//! used: the frame is decompressed, the table is expanded, and the decompressed frame is dropped again.
-class EncodingsDataset {
+[[noreturn]] static void ThrowCorrupt() {
+	throw cxx::InvalidInputException("Corrupt encodings dataset");
+}
+
+//! A conversion table of the dataset, shared by every name it is registered under. All tables are compressed together,
+//! so a table is unpacked the first time it is needed (when a query that uses it is bound): the frame is decompressed,
+//! the table is expanded, and the decompressed frame is dropped again.
+class EncodingTable {
 public:
-	EncodingsDataset() {
-		Parse();
+	EncodingTable(const TableRecord &record, const unsigned char *frame, size_t frame_size, size_t content_size)
+	    : lookup_bytes(record.lookup_bytes), max_output_bytes(record.max_output_bytes), map_size(record.map_size),
+	      record(record), frame(frame), frame_size(frame_size), content_size(content_size) {
 	}
 
-	const vector<TableRecord> &Records() const {
-		return records;
-	}
-	const vector<EncodingName> &Names() const {
-		return names;
-	}
-	//! The entry of the handle array that identifies the table (see GetTable): it is what a registered encoding
-	//! points its conversion map at, and is never read as a map
-	const map_entry_encoding *Handle(idx_t table) const {
-		return &handles[table];
+	//! Unpacks the table and builds the index to decode with, if that has not happened yet
+	const EncodingIndex &GetIndex() {
+		std::call_once(index_flag, [&]() {
+			Unpack();
+			index = std::make_unique<EncodingIndex>(entries.data(), entries.size());
+		});
+		return *index;
 	}
 
-	const ConversionTable &GetTable(const map_entry_encoding *handle) {
-		const auto table = NumericCast<idx_t>(handle - handles.data());
-		D_ASSERT(table < tables.size());
-		lock_guard<mutex> guard(lock);
-		if (!tables[table]) {
-			tables[table] = Unpack(records[table]);
-		}
-		return *tables[table];
+	const map_entry_encoding *Map() {
+		GetIndex();
+		return entries.data();
 	}
+
+	//! The index to encode with, built if that has not happened yet
+	const ReverseIndex &GetReverseIndex() {
+		std::call_once(reverse_flag, [&]() { reverse = std::make_unique<ReverseIndex>(Map(), map_size); });
+		return *reverse;
+	}
+
+public:
+	//! The maximum number of input bytes that make up a single character
+	size_t lookup_bytes;
+	//! The maximum number of UTF-8 bytes produced for one byte sequence of the encoding
+	size_t max_output_bytes;
+	size_t map_size;
 
 private:
-	static uint32_t ReadU32(const unsigned char *&pos, const unsigned char *end) {
-		if (end - pos < 4) {
-			throw InternalException("Corrupt encodings dataset");
-		}
-		uint32_t result;
-		memcpy(&result, pos, sizeof(result)); // the dataset is little endian, like every platform DuckDB supports
-		pos += sizeof(result);
-		return result;
-	}
-
-	void Parse() {
-		const auto end = ENCODINGS_DATASET + ENCODINGS_DATASET_SIZE;
-		auto pos = ENCODINGS_DATASET;
-		if (ENCODINGS_DATASET_SIZE < 8 || memcmp(pos, "DKENC001", 8) != 0) {
-			throw InternalException("Corrupt encodings dataset");
-		}
-		pos += 8;
-		const auto table_count = ReadU32(pos, end);
-		const auto name_count = ReadU32(pos, end);
-		content_size = ReadU32(pos, end);
-		for (idx_t i = 0; i < table_count; i++) {
-			TableRecord record;
-			record.offset = ReadU32(pos, end);
-			record.size = ReadU32(pos, end);
-			record.map_size = ReadU32(pos, end);
-			const auto sizes = ReadU32(pos, end);
-			record.lookup_bytes = sizes & 0xff;
-			record.max_output_bytes = (sizes >> 8) & 0xff;
-			records.push_back(record);
-		}
-		for (idx_t i = 0; i < name_count; i++) {
-			EncodingName name;
-			name.table = ReadU32(pos, end);
-			if (end - pos < 2 || name.table >= table_count) {
-				throw InternalException("Corrupt encodings dataset");
-			}
-			uint16_t length;
-			memcpy(&length, pos, sizeof(length));
-			pos += sizeof(length);
-			if (static_cast<idx_t>(end - pos) < length) {
-				throw InternalException("Corrupt encodings dataset");
-			}
-			name.name = string(reinterpret_cast<const char *>(pos), length);
-			pos += length;
-			names.push_back(std::move(name));
-		}
-		frame = pos;
-		frame_size = NumericCast<idx_t>(end - pos);
-		handles.resize(table_count);
-		tables.resize(table_count);
-	}
-
 	static uint64_t ReadVarint(const unsigned char *&pos, const unsigned char *end) {
 		uint64_t result = 0;
-		for (uint32_t shift = 0; shift < 64; shift += 7) {
-			if (pos == end) {
-				break;
-			}
+		for (uint32_t shift = 0; shift < 64 && pos != end; shift += 7) {
 			const auto byte = *pos++;
 			result |= static_cast<uint64_t>(byte & 0x7f) << shift;
 			if (!(byte & 0x80)) {
 				return result;
 			}
 		}
-		throw InternalException("Corrupt encodings dataset");
+		ThrowCorrupt();
 	}
 
 	static int64_t ReadSignedVarint(const unsigned char *&pos, const unsigned char *end) {
@@ -166,7 +171,7 @@ private:
 		return (value & 1) ? -static_cast<int64_t>((value + 1) >> 1) : static_cast<int64_t>(value >> 1);
 	}
 
-	static idx_t WriteUTF8(uint32_t value, char *target) {
+	static size_t WriteUTF8(uint32_t value, char *target) {
 		if (value < 0x80) {
 			target[0] = static_cast<char>(value);
 			return 1;
@@ -189,65 +194,127 @@ private:
 		return 4;
 	}
 
-	unique_ptr<ConversionTable> Unpack(const TableRecord &record) const {
-		vector<unsigned char> content(content_size);
+	void Unpack() {
+		std::vector<unsigned char> content(content_size);
 		const auto decompressed = duckdb_zstd::ZSTD_decompress(content.data(), content.size(), frame, frame_size);
 		if (duckdb_zstd::ZSTD_isError(decompressed) || decompressed != content_size ||
-		    static_cast<idx_t>(record.offset) + record.size > content_size) {
-			throw InternalException("Corrupt encodings dataset");
+		    static_cast<size_t>(record.offset) + record.size > content_size || record.size < 4) {
+			ThrowCorrupt();
 		}
 
-		auto result = make_uniq<ConversionTable>();
 		const auto end = content.data() + record.offset + record.size;
 		auto pos = static_cast<const unsigned char *>(content.data() + record.offset);
-		const auto key_deltas_size = ReadU32(pos, end);
+		uint32_t key_deltas_size;
+		std::memcpy(&key_deltas_size, pos, sizeof(key_deltas_size)); // little endian, like every supported platform
+		pos += sizeof(key_deltas_size);
 		const auto key_lengths = pos;
-		if (static_cast<idx_t>(end - pos) < static_cast<idx_t>(record.map_size) + key_deltas_size) {
-			throw InternalException("Corrupt encodings dataset");
+		if (static_cast<size_t>(end - pos) < static_cast<size_t>(record.map_size) + key_deltas_size) {
+			ThrowCorrupt();
 		}
 		auto key_deltas = key_lengths + record.map_size;
 		auto value_deltas = key_deltas + key_deltas_size;
 		const auto key_deltas_end = value_deltas;
 
 		// Every entry has a key of up to 8 bytes and a UTF-8 value of up to 4 bytes
-		result->bytes.resize(static_cast<idx_t>(record.map_size) * 12);
-		result->entries.reserve(record.map_size);
-		auto target = result->bytes.data();
+		bytes.resize(static_cast<size_t>(record.map_size) * 12);
+		entries.reserve(record.map_size);
+		auto target = bytes.data();
 		int64_t key = 0;
 		int64_t value = 0;
-		for (idx_t i = 0; i < record.map_size; i++) {
+		for (size_t i = 0; i < record.map_size; i++) {
 			const auto key_length = key_lengths[i];
 			key += ReadSignedVarint(key_deltas, key_deltas_end);
 			value += ReadSignedVarint(value_deltas, end);
 			if (key_length == 0 || key_length > 8 || value < 0 || value > 0x10FFFF) {
-				throw InternalException("Corrupt encodings dataset");
+				ThrowCorrupt();
 			}
 			map_entry_encoding entry;
 			entry.key_len = key_length;
 			entry.key = target;
-			for (idx_t byte = 0; byte < key_length; byte++) {
+			for (size_t byte = 0; byte < key_length; byte++) {
 				*target++ = static_cast<char>((static_cast<uint64_t>(key) >> (8 * (key_length - 1 - byte))) & 0xff);
 			}
 			entry.value = target;
 			entry.value_len = WriteUTF8(static_cast<uint32_t>(value), target);
 			target += entry.value_len;
-			result->entries.push_back(entry);
+			entries.push_back(entry);
 		}
-		result->index = make_uniq<EncodingIndex>(result->entries.data(), result->entries.size());
-		return result;
 	}
 
 private:
-	vector<TableRecord> records;
-	vector<EncodingName> names;
-	const unsigned char *frame = nullptr;
-	idx_t frame_size = 0;
-	//! The size of the frame once decompressed
-	idx_t content_size = 0;
-	vector<map_entry_encoding> handles;
+	TableRecord record;
+	const unsigned char *frame;
+	size_t frame_size;
+	size_t content_size;
 
-	mutex lock;
-	vector<unique_ptr<ConversionTable>> tables;
+	//! The entries, sorted by key; their keys and values point into `bytes`
+	std::vector<map_entry_encoding> entries;
+	std::vector<char> bytes;
+	std::once_flag index_flag;
+	std::unique_ptr<EncodingIndex> index;
+	std::once_flag reverse_flag;
+	std::unique_ptr<ReverseIndex> reverse;
+};
+
+using EncodingTablePtr = std::shared_ptr<EncodingTable>;
+
+//! The tables and names of the dataset, shared by all databases the extension is loaded into
+class EncodingsDataset {
+public:
+	EncodingsDataset() {
+		const auto end = ENCODINGS_DATASET + ENCODINGS_DATASET_SIZE;
+		auto pos = ENCODINGS_DATASET;
+		if (ENCODINGS_DATASET_SIZE < 8 || std::memcmp(pos, "DKENC001", 8) != 0) {
+			ThrowCorrupt();
+		}
+		pos += 8;
+		const auto table_count = ReadU32(pos, end);
+		const auto name_count = ReadU32(pos, end);
+		const auto content_size = ReadU32(pos, end);
+		std::vector<TableRecord> records;
+		for (size_t i = 0; i < table_count; i++) {
+			TableRecord record;
+			record.offset = ReadU32(pos, end);
+			record.size = ReadU32(pos, end);
+			record.map_size = ReadU32(pos, end);
+			const auto sizes = ReadU32(pos, end);
+			record.lookup_bytes = sizes & 0xff;
+			record.max_output_bytes = (sizes >> 8) & 0xff;
+			records.push_back(record);
+		}
+		for (size_t i = 0; i < name_count; i++) {
+			const auto table = ReadU32(pos, end);
+			if (end - pos < 2 || table >= table_count) {
+				ThrowCorrupt();
+			}
+			uint16_t length;
+			std::memcpy(&length, pos, sizeof(length));
+			pos += sizeof(length);
+			if (static_cast<size_t>(end - pos) < length) {
+				ThrowCorrupt();
+			}
+			names.push_back({table, std::string(reinterpret_cast<const char *>(pos), length)});
+			pos += length;
+		}
+		for (auto &record : records) {
+			tables.push_back(
+			    std::make_shared<EncodingTable>(record, pos, static_cast<size_t>(end - pos), content_size));
+		}
+	}
+
+	std::vector<EncodingName> names;
+	std::vector<EncodingTablePtr> tables;
+
+private:
+	static uint32_t ReadU32(const unsigned char *&pos, const unsigned char *end) {
+		if (end - pos < 4) {
+			ThrowCorrupt();
+		}
+		uint32_t result;
+		std::memcpy(&result, pos, sizeof(result)); // the dataset is little endian, like every supported platform
+		pos += sizeof(result);
+		return result;
+	}
 };
 
 static EncodingsDataset &GetDataset() {
@@ -255,31 +322,49 @@ static EncodingsDataset &GetDataset() {
 	return dataset;
 }
 
-void GeneratedEncodedFunction::Decode(CSVEncoderBuffer &encoded_buffer, char *target_buffer,
-                                      idx_t &target_buffer_current_position, const idx_t target_buffer_size,
-                                      char *remaining_bytes_buffer, idx_t &remaining_bytes_size,
-                                      EncodingFunction *encoding_function) {
-	const auto &table = GetDataset().GetTable(encoding_function->conversion_map);
-	const auto &index = *table.index;
-	const auto map = table.entries.data();
-	const auto encoded_buffer_ptr = encoded_buffer.Ptr();
-	const idx_t lookup_bytes = encoding_function->GetLookupBytes();
-	const idx_t encoded_buffer_size = encoded_buffer.actual_encoded_buffer_size;
-	while (encoded_buffer.cur_pos < encoded_buffer_size) {
-		const idx_t available = encoded_buffer_size - encoded_buffer.cur_pos;
-		if (available < lookup_bytes && !encoded_buffer.last_buffer) {
-			// Not enough bytes to check; the remaining bytes are carried over to the next buffer by the caller
-			return;
+//===--------------------------------------------------------------------===//
+// Decoding and encoding
+//===--------------------------------------------------------------------===//
+struct MapEntryComparator {
+	bool operator()(const map_entry_encoding &entry, const std::pair<const char *, size_t> &key) const {
+		return KeyLess(entry.key, entry.key_len, key.first, key.second);
+	}
+};
+
+static const map_entry_encoding *FindEntry(const map_entry_encoding *map, size_t map_size, const char *search_key,
+                                           size_t search_len) {
+	const auto it =
+	    std::lower_bound(map, map + map_size, std::make_pair(search_key, search_len), MapEntryComparator {});
+	if (it != map + map_size && it->key_len == search_len && std::memcmp(it->key, search_key, search_len) == 0) {
+		return it;
+	}
+	return nullptr;
+}
+
+//! Decodes a prefix of the input to UTF-8 into `output`, which has room for input_size * max_output_bytes bytes.
+//! Unless is_last is set, an incomplete trailing character is left unconsumed.
+static void DecodePrefix(EncodingTable &table, const char *input, size_t input_size, bool is_last, char *output,
+                         size_t &consumed, size_t &written) {
+	const auto &index = table.GetIndex();
+	const auto map = table.Map();
+	const auto lookup_bytes = table.lookup_bytes;
+	size_t pos = 0;
+	size_t out = 0;
+	while (pos < input_size) {
+		const size_t available = input_size - pos;
+		if (available < lookup_bytes && !is_last) {
+			// Not enough bytes to check; the caller hands the remaining bytes back with the next ones
+			break;
 		}
-		const char *current = &encoded_buffer_ptr[encoded_buffer.cur_pos];
+		const char *current = input + pos;
 		const auto first = static_cast<uint8_t>(*current);
 		// Prefer the longest matching byte sequence
 		const map_entry_encoding *match = nullptr;
-		idx_t match_len = 1;
+		size_t match_len = 1;
 		if (index.HasMultiByte(first)) {
 			const auto candidates = map + index.multi_begin[first];
 			const size_t candidate_count = index.multi_end[first] - index.multi_begin[first];
-			for (idx_t len = std::min<idx_t>(lookup_bytes, available); len > 1; len--) {
+			for (size_t len = std::min(lookup_bytes, available); len > 1; len--) {
 				match = FindEntry(candidates, candidate_count, current, len);
 				if (match) {
 					match_len = len;
@@ -292,63 +377,220 @@ void GeneratedEncodedFunction::Decode(CSVEncoderBuffer &encoded_buffer, char *ta
 		}
 		if (!match) {
 			// No mapping for this byte: pass it through unchanged
-			encoded_buffer.cur_pos++;
-			if (target_buffer_current_position == target_buffer_size) {
-				// The target buffer is full: hand the byte to the next chunk instead of writing past the end
-				remaining_bytes_buffer[0] = *current;
-				remaining_bytes_size = 1;
-				return;
-			}
-			target_buffer[target_buffer_current_position++] = *current;
+			output[out++] = *current;
+			pos++;
 			continue;
 		}
-		encoded_buffer.cur_pos += match_len;
-		for (idx_t byte_pos = 0; byte_pos < match->value_len; ++byte_pos) {
-			if (target_buffer_current_position == target_buffer_size) {
-				// The target buffer is full: store the rest of this character for the next chunk
-				remaining_bytes_size = match->value_len - byte_pos;
-				for (idx_t remaining_pos = 0; remaining_pos < remaining_bytes_size; ++remaining_pos) {
-					remaining_bytes_buffer[remaining_pos] = static_cast<char>(match->value[byte_pos + remaining_pos]);
-				}
-				return;
+		std::memcpy(output + out, match->value, match->value_len);
+		out += match->value_len;
+		pos += match_len;
+	}
+	consumed = pos;
+	written = out;
+}
+
+//! Encodes UTF-8 input into `output`, which has room for input_size * lookup_bytes bytes. Throws if the input has a
+//! character the encoding cannot represent.
+static size_t EncodeAll(EncodingTable &table, const std::string &name, const char *input, size_t input_size,
+                        char *output) {
+	const auto &index = table.GetReverseIndex();
+	size_t pos = 0;
+	size_t out = 0;
+	while (pos < input_size) {
+		const auto first = static_cast<uint8_t>(input[pos]);
+		const auto bucket_begin = index.entries.begin() + index.begin[first];
+		const auto bucket_end = index.entries.begin() + index.end[first];
+		const map_entry_encoding *match = nullptr;
+		// Prefer the longest matching UTF-8 sequence
+		for (size_t len = std::min(index.max_value_len, input_size - pos); len > 0 && !match; len--) {
+			const auto it = std::lower_bound(
+			    bucket_begin, bucket_end, std::make_pair(input + pos, len),
+			    [](const map_entry_encoding *entry, const std::pair<const char *, size_t> &key) {
+				    return KeyLess(entry->value, entry->value_len, key.first, key.second);
+			    });
+			if (it != bucket_end && (*it)->value_len == len && std::memcmp((*it)->value, input + pos, len) == 0) {
+				match = *it;
 			}
-			target_buffer[target_buffer_current_position++] = match->value[byte_pos];
 		}
+		if (!match) {
+			throw cxx::InvalidInputException("Could not encode the character at byte " + std::to_string(pos) + " in " +
+			                                 name);
+		}
+		std::memcpy(output + out, match->key, match->key_len);
+		out += match->key_len;
+		pos += match->value_len;
 	}
+	return out;
 }
 
-bool GeneratedEncodedFunction::KeyLess(const char *a, size_t a_len, const char *b, size_t b_len) {
-	const size_t min_len = std::min(a_len, b_len);
-	const int cmp = std::memcmp(a, b, min_len);
-	if (cmp != 0) {
-		return cmp < 0;
-	}
-	return a_len < b_len;
-}
-
-struct MapEntryComparator {
-	bool operator()(const map_entry_encoding &entry, const std::pair<const char *, size_t> &key) const {
-		return GeneratedEncodedFunction::KeyLess(entry.key, entry.key_len, key.first, key.second);
-	}
+//! The state of one name of an encoding: the table, and the name for error messages.
+struct EncodingFunctionData {
+	EncodingTablePtr table;
+	std::string name;
 };
 
-const map_entry_encoding *GeneratedEncodedFunction::FindEntry(const map_entry_encoding *map, size_t map_size,
-                                                              const char *search_key, size_t search_len) {
-	const auto it =
-	    std::lower_bound(map, map + map_size, std::make_pair(search_key, search_len), MapEntryComparator {});
-	if (it != map + map_size && it->key_len == search_len && std::memcmp(it->key, search_key, search_len) == 0) {
-		return it;
-	}
-	return nullptr;
+//! Unpacks the table once the query is bound, rather than while it runs
+static void BindDecode(cxx::ScalarFunction::BindInput &input) {
+	input.GetUserData<EncodingFunctionData>().table->GetIndex();
 }
 
-void RegisterEncodings(const DBConfig &config) {
+static void BindEncode(cxx::ScalarFunction::BindInput &input) {
+	input.GetUserData<EncodingFunctionData>().table->GetReverseIndex();
+}
+
+//! system.encodings."<name>"(BLOB) -> VARCHAR: decodes the complete input
+static void DecodeAllExec(cxx::ScalarFunction::ExecInput &input) {
+	auto &data = input.GetUserData<EncodingFunctionData>();
+	auto &table = *data.table;
+	const auto count = input.GetRowCount();
+	const auto blobs = input.GetArg(0).GetView();
+	auto result = input.GetResult();
+	auto mask = result.GetValidityMutable();
+	mask.SetAllValid(count);
+
+	std::string buffer;
+	for (cxx::idx_t row = 0; row < count; row++) {
+		if (!blobs.IsValid(row)) {
+			mask.SetInvalid(row);
+			continue;
+		}
+		const auto &blob = blobs.Data<cxx::blob_t>()[blobs.SelAt(row)];
+		buffer.resize(std::max<size_t>(blob.size() * table.max_output_bytes, 1));
+		size_t consumed = 0;
+		size_t written = 0;
+		DecodePrefix(table, blob.data(), blob.size(), true, &buffer[0], consumed, written);
+		result.AssignStringUnsafe(row, std::string_view(buffer.data(), written));
+	}
+}
+
+//! system.encodings."<name>"(BLOB, BOOLEAN is_last) -> STRUCT(decoded VARCHAR, consumed BIGINT): decodes a prefix of a
+//! stream
+static void DecodeStreamExec(cxx::ScalarFunction::ExecInput &input) {
+	auto &data = input.GetUserData<EncodingFunctionData>();
+	auto &table = *data.table;
+	const auto count = input.GetRowCount();
+	const auto blobs = input.GetArg(0).GetView();
+	const auto is_last = input.GetArg(1).GetView();
+	auto result = input.GetResult();
+	auto decoded = result.GetChild(0);
+	auto consumed_vector = result.GetChild(1);
+	auto consumed_data = consumed_vector.GetDataMutable<int64_t>();
+	auto struct_mask = result.GetValidityMutable();
+	auto decoded_mask = decoded.GetValidityMutable();
+	auto consumed_mask = consumed_vector.GetValidityMutable();
+	struct_mask.SetAllValid(count);
+	decoded_mask.SetAllValid(count);
+	consumed_mask.SetAllValid(count);
+
+	std::string buffer;
+	for (cxx::idx_t row = 0; row < count; row++) {
+		if (!blobs.IsValid(row) || !is_last.IsValid(row)) {
+			struct_mask.SetInvalid(row);
+			decoded_mask.SetInvalid(row);
+			consumed_mask.SetInvalid(row);
+			continue;
+		}
+		const auto &blob = blobs.Data<cxx::blob_t>()[blobs.SelAt(row)];
+		const bool last = is_last.Data<bool>()[is_last.SelAt(row)];
+		buffer.resize(std::max<size_t>(blob.size() * table.max_output_bytes, 1));
+		size_t consumed = 0;
+		size_t written = 0;
+		DecodePrefix(table, blob.data(), blob.size(), last, &buffer[0], consumed, written);
+		decoded.AssignStringUnsafe(row, std::string_view(buffer.data(), written));
+		consumed_data[row] = static_cast<int64_t>(consumed);
+	}
+}
+
+//! system.encodings."<name>"(VARCHAR) -> BLOB: encodes the input
+static void EncodeExec(cxx::ScalarFunction::ExecInput &input) {
+	auto &data = input.GetUserData<EncodingFunctionData>();
+	auto &table = *data.table;
+	const auto count = input.GetRowCount();
+	const auto strings = input.GetArg(0).GetView();
+	auto result = input.GetResult();
+	auto mask = result.GetValidityMutable();
+	mask.SetAllValid(count);
+
+	std::string buffer;
+	for (cxx::idx_t row = 0; row < count; row++) {
+		if (!strings.IsValid(row)) {
+			mask.SetInvalid(row);
+			continue;
+		}
+		const auto &string = strings.Data<cxx::varchar_t>()[strings.SelAt(row)];
+		buffer.resize(std::max<size_t>(string.size() * table.lookup_bytes, 1));
+		const auto written = EncodeAll(table, data.name, string.data(), string.size(), &buffer[0]);
+		result.AssignString(row, std::string_view(buffer.data(), written));
+	}
+}
+
+//===--------------------------------------------------------------------===//
+// Registration
+//===--------------------------------------------------------------------===//
+static std::mutex &RegisteredLock() {
+	static std::mutex lock;
+	return lock;
+}
+
+//! By name: the extension registers the same encodings in every database it is loaded into
+static std::map<std::string, RegisteredEncoding> &Registered() {
+	static std::map<std::string, RegisteredEncoding> registered;
+	return registered;
+}
+
+std::vector<RegisteredEncoding> GetRegisteredEncodings() {
+	std::lock_guard<std::mutex> guard(RegisteredLock());
+	std::vector<RegisteredEncoding> result;
+	for (auto &entry : Registered()) {
+		result.push_back(entry.second);
+	}
+	return result;
+}
+
+static std::string Lowercase(const std::string &name) {
+	std::string result = name;
+	std::transform(result.begin(), result.end(), result.begin(),
+	               [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+	return result;
+}
+
+//! The functions of an encoding are named after it, in lowercase, in the encodings schema
+static void RegisterName(EncodingRegistrar &registrar, const std::string &name, const EncodingTablePtr &table) {
+	auto &factory = registrar.factory;
+	const auto blob = factory.ParseType("BLOB");
+	const auto varchar = factory.ParseType("VARCHAR");
+	const auto boolean = factory.ParseType("BOOLEAN");
+	const auto stream_result = factory.ParseType("STRUCT(decoded VARCHAR, consumed BIGINT)");
+	const auto function_name = Lowercase(name);
+
+	auto decode_all = cxx::ScalarFunction::Create(factory);
+	decode_all.SetName(function_name).SetSchema(SCHEMA).SetBindCallback(BindDecode).SetExecCallback(DecodeAllExec);
+	decode_all.GetSignature().AddParameter("data", blob).SetReturnType(varchar);
+	decode_all.SetUserData<EncodingFunctionData>(EncodingFunctionData {table, name});
+	registrar.extension.Register(decode_all);
+
+	auto decode_stream = cxx::ScalarFunction::Create(factory);
+	decode_stream.SetName(function_name).SetSchema(SCHEMA).SetBindCallback(BindDecode).SetExecCallback(
+	    DecodeStreamExec);
+	decode_stream.GetSignature().AddParameter("data", blob).AddParameter("is_last", boolean).SetReturnType(
+	    stream_result);
+	decode_stream.SetUserData<EncodingFunctionData>(EncodingFunctionData {table, name});
+	registrar.extension.Register(decode_stream);
+
+	auto encode = cxx::ScalarFunction::Create(factory);
+	encode.SetName(function_name).SetSchema(SCHEMA).SetBindCallback(BindEncode).SetExecCallback(EncodeExec);
+	encode.GetSignature().AddParameter("string", varchar).SetReturnType(blob);
+	encode.SetUserData<EncodingFunctionData>(EncodingFunctionData {table, name});
+	registrar.extension.Register(encode);
+
+	std::lock_guard<std::mutex> guard(RegisteredLock());
+	Registered()[function_name] = {function_name, table->lookup_bytes, table->max_output_bytes, table->map_size};
+}
+
+void RegisterEncodings(EncodingRegistrar &registrar) {
 	auto &dataset = GetDataset();
-	for (auto &name : dataset.Names()) {
-		auto &record = dataset.Records()[name.table];
-		config.RegisterEncodeFunction(EncodingFunction(name.name, GeneratedEncodedFunction::Decode,
-		                                               record.max_output_bytes, record.lookup_bytes,
-		                                               dataset.Handle(name.table), record.map_size));
+	for (auto &name : dataset.names) {
+		RegisterName(registrar, name.name, dataset.tables[name.table]);
 	}
 }
 
