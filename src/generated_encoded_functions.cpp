@@ -9,6 +9,7 @@
 #include <cctype>
 #include <cstdint>
 #include <cstring>
+#include <limits>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -57,6 +58,83 @@ struct EncodingIndex {
 
 	bool HasMultiByte(uint8_t first) const {
 		return multi_end[first] > multi_begin[first];
+	}
+};
+
+//! Lookup tables for the common cases of decoding, built on top of the index
+struct DecodeTables {
+	//! What a byte that starts no multi-byte sequence decodes to: its single-byte entry, or the byte itself if it has
+	//! none
+	char value[256][4] = {};
+	uint8_t length[256] = {};
+	//! The ASCII bytes that decode to themselves
+	bool ascii_identity[256] = {};
+	//! The other ASCII bytes, broadcast to every byte of a word. Runs of ASCII are copied 8 bytes at a time if there
+	//! are only a few of them.
+	uint64_t ascii_exceptions[4] = {};
+	size_t ascii_exception_count = 0;
+	bool copy_ascii_words = false;
+	//! For a lead byte that starts multi-byte sequences: the offset of its 256 slots in pairs
+	uint32_t pair_offset[256] = {};
+	//! Per lead byte and second byte: 1 + the index in the map of the two-byte entry, or 0 if there is none
+	std::vector<uint32_t> pairs;
+
+	DecodeTables(const EncodingIndex &index, const map_entry_encoding *map) {
+		size_t exception_count = 0;
+		for (uint32_t byte = 0; byte < 256; byte++) {
+			const auto entry = index.single[byte];
+			if (entry) {
+				std::memcpy(value[byte], entry->value, entry->value_len);
+				length[byte] = static_cast<uint8_t>(entry->value_len);
+			} else {
+				value[byte][0] = static_cast<char>(byte);
+				length[byte] = 1;
+			}
+			if (byte >= 0x80) {
+				continue;
+			}
+			if (!index.HasMultiByte(static_cast<uint8_t>(byte)) && length[byte] == 1 &&
+			    static_cast<uint8_t>(value[byte][0]) == byte) {
+				ascii_identity[byte] = true;
+			} else {
+				if (exception_count < 4) {
+					ascii_exceptions[exception_count] = 0x0101010101010101ULL * byte;
+				}
+				exception_count++;
+			}
+		}
+		copy_ascii_words = exception_count <= 4;
+		ascii_exception_count = copy_ascii_words ? exception_count : 0;
+
+		pairs.push_back(0);
+		for (uint32_t first = 0; first < 256; first++) {
+			if (!index.HasMultiByte(static_cast<uint8_t>(first))) {
+				continue;
+			}
+			pair_offset[first] = static_cast<uint32_t>(pairs.size());
+			pairs.resize(pairs.size() + 256, 0);
+			for (uint32_t i = index.multi_begin[first]; i < index.multi_end[first]; i++) {
+				auto &slot = pairs[pair_offset[first] + static_cast<uint8_t>(map[i].key[1])];
+				if (map[i].key_len == 2 && slot == 0) {
+					slot = i + 1;
+				}
+			}
+		}
+	}
+
+	//! Whether all 8 bytes of the word are ASCII that decodes to itself
+	bool IsIdentityWord(uint64_t word) const {
+		if (word & 0x8080808080808080ULL) {
+			return false;
+		}
+		for (size_t i = 0; i < ascii_exception_count; i++) {
+			// Whether a byte of the word equals the exception, see "Determine if a word has a zero byte"
+			const auto diff = word ^ ascii_exceptions[i];
+			if ((diff - 0x0101010101010101ULL) & ~diff & 0x8080808080808080ULL) {
+				return false;
+			}
+		}
+		return true;
 	}
 };
 
@@ -131,8 +209,14 @@ public:
 		std::call_once(index_flag, [&]() {
 			Unpack();
 			index = std::make_unique<EncodingIndex>(entries.data(), entries.size());
+			decode_tables = std::make_unique<DecodeTables>(*index, entries.data());
 		});
 		return *index;
+	}
+
+	const DecodeTables &GetDecodeTables() {
+		GetIndex();
+		return *decode_tables;
 	}
 
 	const map_entry_encoding *Map() {
@@ -252,6 +336,7 @@ private:
 	std::vector<char> bytes;
 	std::once_flag index_flag;
 	std::unique_ptr<EncodingIndex> index;
+	std::unique_ptr<DecodeTables> decode_tables;
 	std::once_flag reverse_flag;
 	std::unique_ptr<ReverseIndex> reverse;
 };
@@ -346,38 +431,66 @@ static const map_entry_encoding *FindEntry(const map_entry_encoding *map, size_t
 static void DecodePrefix(EncodingTable &table, const char *input, size_t input_size, bool is_last, char *output,
                          size_t &consumed, size_t &written) {
 	const auto &index = table.GetIndex();
+	const auto &tables = table.GetDecodeTables();
 	const auto map = table.Map();
 	const auto lookup_bytes = table.lookup_bytes;
+	// Unless this is the end of the input, a character that starts in the last lookup_bytes - 1 bytes may be
+	// incomplete: those bytes are handed back by the caller with the next ones
+	size_t decode_end = input_size;
+	if (!is_last) {
+		decode_end = input_size >= lookup_bytes ? input_size - lookup_bytes + 1 : 0;
+	}
 	size_t pos = 0;
 	size_t out = 0;
-	while (pos < input_size) {
-		const size_t available = input_size - pos;
-		if (available < lookup_bytes && !is_last) {
-			// Not enough bytes to check; the caller hands the remaining bytes back with the next ones
-			break;
-		}
+	while (pos < decode_end) {
 		const char *current = input + pos;
 		const auto first = static_cast<uint8_t>(*current);
-		// Prefer the longest matching byte sequence
+		if (tables.ascii_identity[first]) {
+			// Copy the run of ASCII this starts, 8 bytes at a time if possible
+			if (tables.copy_ascii_words) {
+				while (pos + 8 <= decode_end) {
+					uint64_t word;
+					std::memcpy(&word, input + pos, sizeof(word));
+					if (!tables.IsIdentityWord(word)) {
+						break;
+					}
+					std::memcpy(output + out, &word, sizeof(word));
+					pos += 8;
+					out += 8;
+				}
+			}
+			while (pos < decode_end && tables.ascii_identity[static_cast<uint8_t>(input[pos])]) {
+				output[out++] = input[pos++];
+			}
+			continue;
+		}
 		const map_entry_encoding *match = nullptr;
 		size_t match_len = 1;
 		if (index.HasMultiByte(first)) {
+			// Prefer the longest matching byte sequence
+			const size_t available = input_size - pos;
 			const auto candidates = map + index.multi_begin[first];
 			const size_t candidate_count = index.multi_end[first] - index.multi_begin[first];
-			for (size_t len = std::min(lookup_bytes, available); len > 1; len--) {
+			for (size_t len = std::min(lookup_bytes, available); len > 2; len--) {
 				match = FindEntry(candidates, candidate_count, current, len);
 				if (match) {
 					match_len = len;
 					break;
 				}
 			}
+			if (!match && available >= 2) {
+				const auto pair = tables.pairs[tables.pair_offset[first] + static_cast<uint8_t>(current[1])];
+				if (pair) {
+					match = map + pair - 1;
+					match_len = 2;
+				}
+			}
 		}
 		if (!match) {
-			match = index.single[first];
-		}
-		if (!match) {
-			// No mapping for this byte: pass it through unchanged
-			output[out++] = *current;
+			// Decode the byte on its own, or pass it through if it has no entry
+			const auto length = tables.length[first];
+			std::memcpy(output + out, tables.value[first], length);
+			out += length;
 			pos++;
 			continue;
 		}
@@ -428,6 +541,22 @@ struct EncodingFunctionData {
 	EncodingTablePtr table;
 	std::string name;
 };
+
+//! Decodes a blob straight into the heap of the result vector. The heap is sized for the worst case, which suits the
+//! few large slices of a stream rather than many small rows.
+static cxx::varchar_t DecodeIntoHeap(cxx::Arena &heap, EncodingTable &table, const cxx::blob_t &blob, bool is_last,
+                                     size_t &consumed) {
+	const auto capacity = blob.size() * table.max_output_bytes;
+	char inline_buffer[cxx::varchar_t::INLINE_LENGTH];
+	char *target =
+	    capacity <= sizeof(inline_buffer) ? inline_buffer : reinterpret_cast<char *>(heap.Allocate(capacity));
+	size_t written = 0;
+	DecodePrefix(table, blob.data(), blob.size(), is_last, target, consumed, written);
+	if (written > (std::numeric_limits<uint32_t>::max)()) {
+		throw cxx::InvalidInputException("The decoded string exceeds the maximum string length");
+	}
+	return cxx::varchar_t(target, static_cast<uint32_t>(written));
+}
 
 //! Unpacks the table once the query is bound, rather than while it runs
 static void BindDecode(cxx::ScalarFunction::BindInput &input) {
@@ -482,7 +611,7 @@ static void DecodeStreamExec(cxx::ScalarFunction::ExecInput &input) {
 	decoded_mask.SetAllValid(count);
 	consumed_mask.SetAllValid(count);
 
-	std::string buffer;
+	auto heap = decoded.GetHeap();
 	for (cxx::idx_t row = 0; row < count; row++) {
 		if (!blobs.IsValid(row) || !is_last.IsValid(row)) {
 			struct_mask.SetInvalid(row);
@@ -492,11 +621,8 @@ static void DecodeStreamExec(cxx::ScalarFunction::ExecInput &input) {
 		}
 		const auto &blob = blobs.Data<cxx::blob_t>()[blobs.SelAt(row)];
 		const bool last = is_last.Data<bool>()[is_last.SelAt(row)];
-		buffer.resize(std::max<size_t>(blob.size() * table.max_output_bytes, 1));
 		size_t consumed = 0;
-		size_t written = 0;
-		DecodePrefix(table, blob.data(), blob.size(), last, &buffer[0], consumed, written);
-		decoded.AssignStringUnsafe(row, std::string_view(buffer.data(), written));
+		decoded.SetString(row, DecodeIntoHeap(heap, table, blob, last, consumed));
 		consumed_data[row] = static_cast<int64_t>(consumed);
 	}
 }

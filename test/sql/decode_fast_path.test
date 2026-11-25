@@ -1,0 +1,52 @@
+# name: test/sql/decode_fast_path.test
+# description: Decoding gives the same result wherever a character falls relative to the 8-byte ASCII runs
+# group: [sql]
+
+require encodings
+
+# windows-1252: a non-ASCII byte at every offset
+query I
+SELECT count(*) FROM range(0, 20) t(n), range(0, 20) t2(m)
+WHERE decode(unhex(repeat('61', n) || 'E9' || repeat('62', m)), 'windows-1252') <> repeat('a', n) || 'é' || repeat('b', m)
+----
+0
+
+# shift_jis decodes the ASCII bytes 0x5C and 0x7E to ¥ and ‾, so they must be caught inside a run of ASCII
+query I
+SELECT count(*) FROM range(0, 20) t(n), range(0, 20) t2(m)
+WHERE decode(unhex(repeat('61', n) || '5C' || repeat('62', m) || '7E'), 'shift_jis') <> repeat('a', n) || '¥' || repeat('b', m) || '‾'
+----
+0
+
+# shift_jis: a two-byte character at every offset
+query I
+SELECT count(*) FROM range(0, 20) t(n), range(0, 20) t2(m)
+WHERE decode(unhex(repeat('61', n) || '93FA' || repeat('62', m)), 'shift_jis') <> repeat('a', n) || '日' || repeat('b', m)
+----
+0
+
+# gb18030: a four-byte sequence at every offset still takes precedence over its two-byte prefix
+query I
+SELECT count(*) FROM range(0, 20) t(n), range(0, 20) t2(m)
+WHERE decode(encode(repeat('a', n) || 'Ā' || repeat('b', m), 'gb18030'), 'gb18030') <> repeat('a', n) || 'Ā' || repeat('b', m)
+----
+0
+
+# The streaming overload leaves a trailing incomplete character unconsumed, and decodes a complete one, at every offset
+query I
+SELECT count(*) FROM range(0, 20) t(n)
+WHERE system.encodings.shift_jis(unhex(repeat('61', n) || '93'), false) <> {'decoded': repeat('a', n), 'consumed': n}
+----
+0
+
+query I
+SELECT count(*) FROM range(0, 20) t(n)
+WHERE system.encodings.shift_jis(unhex(repeat('61', n) || '93FA'), false) <> {'decoded': repeat('a', n) || '日', 'consumed': n + 2}
+----
+0
+
+query I
+SELECT count(*) FROM range(0, 20) t(n)
+WHERE system.encodings.shift_jis(unhex(repeat('61', n) || '93FA'), true) <> {'decoded': repeat('a', n) || '日', 'consumed': n + 2}
+----
+0
